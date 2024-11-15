@@ -1,0 +1,14 @@
+<!-- Representative Information -->
+<div>
+    <h3 class="text-lg font-semibold mb-4">Vekil Kişi Bilgileri (Satıcı)</h3>
+    <div class="grid grid-cols-2 gap-6">
+        <!-- Agent Name -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Adı ve Soyadı</label>
+            <input type="text" name="agent_name" id="agent_name" value="{{ form.agent_name.data | skip_none }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            {% if form.agent_name.errors %}
+            <span class="text-red-500 text-sm">{{ form.agent_name.errors[0] }}</span>
+            {% endif %}
+        </div>
+    </div>
+</div>

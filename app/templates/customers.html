@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Müşteri Listesi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+{% include 'navbar.html' %}
+
+<!-- Main Content -->
+<main class="container mx-auto px-4 py-6">
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Müşteri Listesi</h2>
+
+        <!-- Customer Table -->
+        <table class="min-w-full bg-white">
+            <thead class="bg-gray-200">
+            <tr>
+                <th class="py-2">Müşteri Adı ve Soyadı</th>
+                <th class="py-2">Telefon Numarası</th>
+                <th class="py-2">E-posta Adresi</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for customer in paginated_customers.items %}
+            <tr>
+                <td class="border px-4 py-2">{{ customer.full_name }}</td>
+                <td class="border px-4 py-2">{{ customer.phone_number }}</td>
+                <td class="border px-4 py-2">{{ customer.email }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="mt-4">
+            <p>Toplam {{ paginated_customers.total }} kayıttan {{ paginated_customers.page*paginated_customers.per_page - paginated_customers.per_page + 1 }} ile {{ paginated_customers.page*paginated_customers.per_page if paginated_customers.page*paginated_customers.per_page < paginated_customers.total else paginated_customers.total }} arası gösteriliyor.</p>
+            <nav class="mt-2">
+                <ul class="inline-flex -space-x-px">
+                    {% if paginated_customers.has_prev %}
+                    <li>
+                        <a href="{{ url_for('customers.customer_list', page=paginated_customers.prev_num) }}" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">Geri</a>
+                    </li>
+                    {% endif %}
+                    {% for page_num in paginated_customers.iter_pages() %}
+                    <li>
+                        <a href="{{ url_for('customers.customer_list', page=page_num) }}" class="py-2 px-3 leading-tight {{ 'bg-blue-500 text-white' if page_num == paginated_customers.page else 'text-gray-500 bg-white' }} border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{{ page_num }}</a>
+                    </li>
+                    {% endfor %}
+                    {% if paginated_customers.has_next %}
+                    <li>
+                        <a href="{{ url_for('customers.customer_list', page=paginated_customers.next_num) }}" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">İleri</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</main>
+</body>
+
+</html>

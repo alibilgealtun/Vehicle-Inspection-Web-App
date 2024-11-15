@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekspertiz Paketleri</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+{% include 'navbar.html' %}
+<div id="alertMessage" class="hidden fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow">
+    <span id="alertText"></span>
+    <button class="close-alert ml-4">&times;</button>
+</div>
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-semibold mb-6">Ekspertiz Paketleri</h1>
+    <button id="newPackageButton" class="bg-green-500 text-white px-4 py-2 rounded shadow mb-4">
+        + Yeni Paket Tanımla
+    </button>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for package in packages %}
+        <div class="bg-white p-6 rounded-lg shadow relative">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold">{{ package.name }}</h2>
+                <div class="flex space-x-2">
+                    <!-- Update Button -->
+                    <button class="text-white bg-blue-500 rounded-full p-1 updateButton" data-id="{{ package.id }}"><i class="fas fa-edit"></i></button>
+                    <!-- Delete Button -->
+                    <form action="{{ url_for('packages.delete_package', package_id=package.id) }}" method="POST" style="display:inline;">
+                        {{ form.hidden_tag() }}
+                        <button type="submit" class="text-white bg-red-500 rounded-full p-1"><i class="fas fa-minus"></i></button>
+                    </form>
+                </div>
+            </div>
+            <p>Paket Fiyatı: {{ package.price }} TL</p>
+            <p>KDV Dahil Fiyatı: {{ package.price * 118 / 100 }} TL</p>
+            <p>Durum:
+                <span class="rounded-full px-2 py-1 text-xs
+            {{ 'bg-green-500 text-white' if package.active else 'bg-red-500 text-white' }}">
+            {{ 'Aktif' if package.active else 'Pasif' }}
+        </span>
+            </p>
+
+            <p>Uygulanan Ekspertizler:</p>
+            <ul class="list-disc ml-5">
+                {% for expertise in get_expertises(package) %}
+                <li>{{ expertise.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="newPackageModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h2 class="text-xl font-semibold mb-4">Paket Oluştur</h2>
+        <form id="packageForm" action="{{ url_for('packages.add_pckg') }}" method="POST" class="space-y-4">
+            {{ form.hidden_tag() }}
+
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Paket Adı</label>
+                <input type="text" name="name" id="package_name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="ÖRN: FULL PAKET">
+            </div>
+            <div>
+                <label for="price" class="block text-sm font-medium text-gray-700">Paket Fiyatı (KDV Hariç Giriniz!)</label>
+                <input type="text" name="price" id="price" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="0.00">
+            </div>
+            <div>
+                <label for="contents" class="block text-sm font-medium text-gray-700">Uygulanan Ekspertizler</label>
+                <select multiple name="contents" id="contents" class="mt-1 block w-full h-32 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    {% set exclude_names = ["İç Ekspertiz", "Dış Ekspertiz", "Yol Ekspertiz", "Dyno Ekspertiz", "Boya Ekspertiz", "Kaporta Ekspertiz"] %}
+                    {% for expertise in expertises %}
+                    {% if expertise.name not in exclude_names %}
+                    <option value="{{ expertise.id }}">{{ expertise.name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+
+            </div>
+            <div>
+                <label for="active" class="block text-sm font-medium text-gray-700">Paket Durumu</label>
+                <select name="active" id="active" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option value="active">Aktif</option>
+                    <option value="inactive">Pasif</option>
+                </select>
+            </div>
+            <div class="flex justify-end space-x-4 mt-6">
+                <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded shadow">Kaydet</button>
+                <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded shadow" id="cancelModal">Vazgeç</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Pass Django Variables to JavaScript -->
+
+<script src="../static/js/packages.js"></script>
+<script>
+    const addPackageUrl = "{{ url_for('packages.add_pckg') }}";
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    showAlert("{{ message }}", "{{ category }}");
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+</script>
+</body>
+
+</html>

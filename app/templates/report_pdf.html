@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @page{
+            size:A4;
+            margin-top: 100px;
+            margin-bottom: 100px;
+            margin-left: 15px;
+            margin-right: 15px;
+            @top-center {
+                content: element(header);
+            }
+
+            @bottom-center {
+                content: element(footer);
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            margin:0;
+            padding:0;
+        }
+        header {
+            position: running(header);
+            width:750px;
+
+        }
+
+        footer {
+            position:  running(footer);
+            width:750px;
+        }
+        .sasi-wrapper {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0 10px;
+            background-color: white;
+            border-left: 3px solid #a82b2e;
+            z-index: 2;
+        }
+
+        .bordered-table {
+            width: 100%;
+            border: 1px solid #dcdcdc;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+        .bordered-table th, .bordered-table td {
+            border: 1px solid #dcdcdc;
+            padding: 8px;
+        }
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0;
+            margin:0;
+        }
+        .table-container {
+            flex: 1;
+            margin-right: 5px;
+            padding: 0;
+        }
+        .section-title {
+            text-align: center;
+            font-size:12px;
+            font-weight: bold;
+            margin-bottom: 0px;
+            background-color: #a82b2e;
+            color: white;
+            padding: 10px;
+        }
+        .checkbox {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 1px solid #000;
+            margin-right: 5px;
+            vertical-align: middle;
+            text-align: center;
+            line-height: 15px;
+        }
+        .checkbox.checked::before {
+            content: '✔';
+            font-size: 12px;
+            color: black;
+        }
+        .checkbox-table {
+            width: 100%;
+        }
+
+        .contact-info {
+            text-align: center;
+            font-size: 10px;
+        }
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            align-items: center;
+        }
+        .signature-box {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: center;
+            width: 150px;
+        }
+
+
+        .page-break {
+            page-break-before: always;
+        }
+        .header-section {
+            font-size:15px;
+            background-color: #a82b2e;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .status-container {
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Ensures the items are centered vertically */
+            padding:0;
+
+        }
+        .status-box {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin:0;
+            padding:0;
+            text-align: center;
+            justify-content: center;
+            vertical-align: middle;
+            line-height: 20px; /* Centers the text vertically */
+            color: white; /* Ensure text color is white for visibility */
+        }
+
+        .filled {
+            background-color: currentColor; /* The background color will be the same as the border */
+            color: white; /* Ensure text color remains visible on filled background */
+        }
+
+        .status-good {
+            border: 5px solid #1d88c9; /* Thinner black border around each box */
+            color: #1d88c9; /* Blue */
+        }
+
+        .status-warning {
+            border: 5px solid #fdcb01; /* Thinner black border around each box */
+            color: #fdcb01; /* Yellow */
+        }
+
+        .status-red {
+            border: 5px solid #c91d1d; /* Thinner black border around each box */
+            color: #c91d1d; /* Red */
+        }
+
+        .status-black {
+            color: white;
+            background-color: black; /* Ensures the background is black */
+            width: 92px; /* Make the black box cover all 3 columns */
+            height:26px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 15px;
+
+        }
+        .inspection-table,
+        .inspection-table-inner {
+            border: 0 solid #dcdcdc; /* Black border for the table */
+        }
+
+        .inspection-table-inner th,
+        .inspection-table-inner td {
+            border: 1px solid #dcdcdc; /* Black border for table cells */
+            padding: 1px 2px;
+            margin:0;
+
+        }
+        .inspection-table-inner td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div id="header">
+    {% include 'pdf/header.html' %}
+</div>
+
+<div id="footer">
+    {% include 'pdf/footer.html' %}
+</div>
+
+{% include 'pdf/first_page.html' %}
+
+
+{% for pckg_report in package_expertise_reports %}
+
+    {% if pckg_report.expertise_type_name == "Motor Ekspertiz" %}
+        <div class="page-break"></div>
+        {% include 'pdf/motor.html' %}
+    {% elif pckg_report.expertise_type_name == "Fren Ekspertiz" %}
+        <div class="page-break"></div>
+        {% include 'pdf/fren.html' %}
+    {% elif pckg_report.expertise_type_name == "Süspansiyon Ekspertiz" %}
+        <div class="page-break"></div>
+        {% include 'pdf/suspansiyon.html' %}
+    {% elif pckg_report.expertise_type_name == "Yanal Kayma Ekspertiz" %}
+        <div class="page-break"></div>
+        {% include 'pdf/yanal.html' %}
+    {% elif pckg_report.expertise_type_name == "Beyin Ekspertiz" %}
+        <div class="page-break"></div>
+        {% include 'pdf/beyin.html' %}
+    {% elif pckg_report.expertise_type_name == "Boya & Kaporta Ekspertiz" %}
+        <div class="page-break"></div>
+        {% include 'pdf/boya.html' %}
+    {% endif %}
+{% endfor %}
+<div class="page-break"></div>
+
+{% include 'pdf/last_page.html' %}
+
+</body>
+</html>

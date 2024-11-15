@@ -1,0 +1,234 @@
+<style>
+    .title-large {
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #a82b2e;
+        text-align: left;
+        padding: 10px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .section-title {
+        background-color: #b52424; /* Red background color */
+        color: white; /* White text color */
+        font-weight: bold;
+        text-align: center; /* Centered text */
+    }
+
+    .summary-text {
+        padding: 15px; /* Adjusted padding for more space */
+        border: 1px solid #ddd;
+        font-size: 14px; /* Slightly larger font size for readability */
+        line-height: 1.5;
+        background-color: #fff; /* White background */
+        text-align: left; /* Ensure left alignment */
+    }
+
+    .flex-container {
+        display: flex;
+        justify-content: space-around; /* Space the elements evenly */
+        align-items: flex-start; /* Align items to the top */
+
+    }
+
+    /* Footer motor section styling */
+    .footer-motor {
+        font-size: 9px; /* Slightly larger font size */
+        color: #666;
+        text-align: justify;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+        background-color: #f8f8f8;
+        width: 30%;
+    }
+    .footer-space{
+        width:5%
+    }
+    .footer-expertise{
+        width:65%;
+    }
+    .section-title{
+        width:95%;
+    }
+    /* Warning text styling */
+    .footer-warning {
+        font-size: 7px;
+        color: red;
+        font-weight: bold;
+        width: 95%;
+        text-align: justify;
+    }
+
+
+    .summary-text {
+        padding: 10px; /* Adjusted padding for more space */
+        border: 1px solid #ddd;
+        font-size: 12px; /* Slightly larger font size for readability */
+        line-height: 1.5;
+        background-color: #fff; /* White background */
+        text-align: left; /* Ensure left alignment */
+        width: 95%; /* Take 50% of the width */
+    }
+    .summary-text-small {
+        font-size: 10px;
+    }
+
+    .summary-text-normal {
+        font-size: 12px;
+    }
+
+</style>
+
+
+<div class="title-large primary-color primary-bg-color" style="position: relative; padding: 15px;">
+    <span style="color: white;">MOTOR EKSPERTİZ RAPORU</span>
+    <div class="sasi-wrapper" style="position: absolute; right: 1%; top: 50%; transform: translateY(-50%); padding: 0 10px; background-color: white; border-left: 0;">
+        <table width="100%">
+            <tbody>
+            <tr>
+                <td class="" style="font-size: 12px; font-weight: bold; ">
+                    ŞASİ NO<span style="font-size: 14px; ">:</span>
+                </td>
+                <td class=" text-medium" rowspan="2" style="font-size: 20px; font-weight: bold;">
+                    {{ vehicle.chassis_number[-6:] }}
+                </td>
+            </tr>
+            <tr>
+                <td class=" text-small" style="font-size: 8px; text-align:center;  ">
+                    SON 6 HANE
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<table cellspacing="0" cellpadding="0" width="100%">
+    <tbody><tr>
+        <td style="padding: 10px 20px;">
+            <img src="{{ motor_image_url }}" alt="Motor Image" style="width: 425px; height: auto;">
+        </td>
+        <td>
+            <table class="color-description" cellpadding="0" cellspacing="0">
+                <tbody><tr>
+                    <td valign="center" align="left"><div class="status-box status-good filled"></div></td>
+                    <td>(İYİ) KONTROLDEN GEÇTİ</td>
+                </tr>
+                <tr>
+                    <td valign="center" align="left"><div class="status-box status-warning filled"></div></td>
+                    <td>(ORTA) SORUN ÇIKARABİLİR</td>
+                </tr>
+                <tr>
+                    <td valign="center" align="left"><div class="status-box status-red filled"></div></td>
+                    <td>(KÖTÜ) BAKIM GEREKLİ</td>
+                </tr>
+                </tbody></table>
+
+        </td>
+    </tr>
+
+    </tbody></table>
+
+
+<div class="table-container" style="display: flex; justify-content: space-between; margin-bottom:5px;">
+    <table class="inspection-table" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <!-- First Column -->
+            <td style="vertical-align: top; width: 50%;">
+                <table class="inspection-table-inner" style="width: 100%; border-collapse: collapse;">
+                    {% for feature in pckg_report.features[:pckg_report.features|length // 2] %}
+                    <tr>
+                        <th style="text-align: left; padding: 8px;">{{ feature.name }}</th>
+                        <td>
+                            {% if feature.status == 'YOK' %}
+                            <div class="status-container">
+                                <span class="status-box status-black filled">YOK</span>
+                            </div>
+                            {% else %}
+                            <div class="status-container">
+                                <span class="status-box status-good {% if feature.status == 'Kontrolden Geçti' %}filled{% endif %}"></span>
+                                <span class="status-box status-warning {% if feature.status == 'Sorun Çıkarabilir' %}filled{% endif %}"></span>
+                                <span class="status-box status-red {% if feature.status == 'Bakım Gerekli' %}filled{% endif %}"></span>
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </td>
+
+            <!-- Second Column -->
+            <td style="vertical-align: top; width: 50%;">
+                <table class="inspection-table-inner" style="width: 100%; border-collapse: collapse;">
+                    {% for feature in pckg_report.features[pckg_report.features|length // 2:] %}
+                    <tr>
+                        <th style="text-align: left; padding: 8px;">{{ feature.name }}</th>
+                        <td>
+                            {% if feature.status == 'YOK' %}
+                            <div class="status-container">
+                                <span class="status-box status-black filled">YOK</span>
+                            </div>
+                            {% else %}
+                            <div class="status-container">
+                                <span class="status-box status-good {% if feature.status == 'Kontrolden Geçti' %}filled{% endif %}"></span>
+                                <span class="status-box status-warning {% if feature.status == 'Sorun Çıkarabilir' %}filled{% endif %}"></span>
+                                <span class="status-box status-red {% if feature.status == 'Bakım Gerekli' %}filled{% endif %}"></span>
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+
+<div class="flex-container">
+    <div class="footer-motor" >
+            Bu rapor şase numarasının aynı olduğu İŞ EMRİ / ARAÇ KABUL / TESLİM / BİLGİ FORMU ile bir bütündür ve raporun devamıdır.
+            Araç kabul bilgi formunda bulunan imza ile hizmet sözleşmesinde yer alan tüm şartları kabul etmiş olursunuz.
+
+    </div>
+
+    <div class="footer-space"></div>
+    <div class="footer-expertise">
+        <div class="section-title">
+            MOTOR EKSPERTİZ ÖZETİ
+        </div>
+        {% if pckg_report.comment|length > 230 %}
+        <div class="summary-text summary-text-small">
+            {{ pckg_report.comment }}
+        </div>
+        {% else %}
+        <div class="summary-text summary-text-normal">
+            {{ pckg_report.comment }}
+        </div>
+        {% endif %}
+        <div class="footer-warning">
+            DİKKAT: Triger seti ve ön zincir seti kapalı kutu olduğundan dolayı kontrol edilmemiştir.
+        </div>
+    </div>
+
+</div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const commentText = `{{ pckg_report.comment }}`; // Escape the comment text for safe JavaScript usage
+        const summaryText = document.querySelector('.summary-text');
+
+        if (commentText.length > 230) {
+            summaryText.style.fontSize = '3px'; // Reduce font size if text exceeds 230 characters
+        } else {
+            summaryText.style.fontSize = '12px'; // Default font size
+        }
+    });
+</script>

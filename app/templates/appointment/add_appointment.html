@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randevu Oluştur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        .modal {
+            display: none;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div id="myModal" class="modal hidden fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex justify-center items-center">
+    <div class="modal-content bg-white p-6 rounded-lg shadow-lg w-1/3">
+        <span id="closeModalBtn" class="close cursor-pointer text-red-500 float-right text-lg">&times;</span>
+        <h2 class="text-2xl mb-4">Randevu Oluştur</h2>
+        <form id="appointmentForm" action="{{ url_for('appointments.add_appointment') }}" method="POST">
+            {{ form.hidden_tag() }}
+
+            <!-- Müşteri Adı -->
+            <label for="customer_name" class="block text-sm font-medium text-gray-700">Müşteri Adı</label>
+            {{ form.customer_name(
+                class="mt-1 p-2 border border-gray-300 rounded w-full",
+                oninput="setCustomValidity('')",
+                oninvalid="this.setCustomValidity('Lütfen isim girin.')"
+        ) }}
+            {% if form.customer_name.errors %}
+            <div class="text-red-500 text-sm mt-1">
+                {% for error in form.customer_name.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Telefon Numarası -->
+            <label for="phone_number" class="block text-sm font-medium text-gray-700 mt-4">Telefon Numarası</label>
+            {{ form.phone_number(
+                class="mt-1 p-2 border border-gray-300 rounded w-full",
+                oninput="setCustomValidity('')",
+                oninvalid="this.setCustomValidity('Telefon numarası 9 ile 15 karakter arasında olmalıdır.')"
+        ) }}
+            {% if form.phone_number.errors %}
+            <div class="text-red-500 text-sm mt-1">
+                {% for error in form.phone_number.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Tarih -->
+            <label for="date" class="block text-sm font-medium text-gray-700 mt-4">Tarih</label>
+            {{ form.date(
+                id="form-date",
+                class="mt-1 p-2 border border-gray-300 rounded w-full",
+                oninput="setCustomValidity('')",
+                oninvalid="this.setCustomValidity('Lütfen geçerli bir tarih girin.')"
+        ) }}
+            {% if form.date.errors %}
+            <div class="text-red-500 text-sm mt-1">
+                {% for error in form.date.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Saat -->
+            <label for="time" class="block text-sm font-medium text-gray-700 mt-4">Saat</label>
+            {{ form.time(
+                class="mt-1 p-2 border border-gray-300 rounded w-full",
+                oninput="setCustomValidity('')",
+                oninvalid="this.setCustomValidity('Lütfen geçerli bir saat girin.')"
+        ) }}
+            {% if form.time.errors %}
+            <div class="text-red-500 text-sm mt-1">
+                {% for error in form.time.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Marka -->
+            <label for="brand" class="block text-sm font-medium text-gray-700 mt-4">Marka</label>
+            {{ form.brand(
+                class="mt-1 p-2 border border-gray-300 rounded w-full",
+                oninput="setCustomValidity('')",
+                oninvalid="this.setCustomValidity('Marka en az 2 karakter uzunluğunda olmalıdır.')"
+        ) }}
+            {% if form.brand.errors %}
+            <div class="text-red-500 text-sm mt-1">
+                {% for error in form.brand.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Model -->
+            <label for="model" class="block text-sm font-medium text-gray-700 mt-4">Model</label>
+            {{ form.model(
+                class="mt-1 p-2 border border-gray-300 rounded w-full",
+                oninput="setCustomValidity('')",
+                oninvalid="this.setCustomValidity('Model en az 2 karakter uzunluğunda olmalıdır.')"
+        ) }}
+            {% if form.model.errors %}
+            <div class="text-red-500 text-sm mt-1">
+                {% for error in form.model.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Submit Button -->
+            <button type="submit" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded">Oluştur</button>
+        </form>
+    </div>
+</div>
+
+<script src="../../static/js/appointment.js"></script>
+</body>
+</html>

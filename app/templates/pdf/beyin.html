@@ -1,0 +1,117 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Include Font Awesome for the checkmark -->
+
+<style>
+    .beyin-bordered-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px;
+    }
+
+    .beyin-bordered-table th, .beyin-bordered-table td {
+        border: 1px solid #dcdcdc;
+        padding: 15px;
+    }
+
+    /* Flexbox for aligning the icon above the text */
+    .beyin-status-container {
+        display: flex;
+        flex-direction: column; /* Stack icon above text */
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap; /* Prevent text from breaking into multiple lines */
+    }
+
+    .beyin-status-icon {
+        font-size: 24px; /* Adjust the size of the checkmark */
+        color: black;
+        background-color: white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .beyin-status-text {
+        margin-top: 5px; /* Space between icon and text */
+        font-weight: bold;
+        font-size: 14px;
+        white-space: nowrap; /* Ensure the text remains on a single line */
+    }
+
+    /* Additional styles for table */
+    .beyin-td {
+        vertical-align: middle;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .beyin-td:nth-child(2) {
+        text-align: left;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    /* Ensure image is centered */
+    .beyin-td img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+<div class="title-large primary-color primary-bg-color" style="position: relative; padding: 15px;">
+    <span style="color: white;">OBD & BEYİN EKSPERTİZ RAPORU</span>
+    <div class="sasi-wrapper" style="position: absolute; right: 1%; top: 50%; transform: translateY(-50%); padding: 0 10px; background-color: white; border-left: 0;">
+        <table width="100%">
+            <tbody>
+            <tr>
+                <td class="" style="font-size: 12px; font-weight: bold; ">
+                    ŞASİ NO<span style="font-size: 14px; ">:</span>
+                </td>
+                <td class=" text-medium" rowspan="2" style="font-size: 20px; font-weight: bold;">
+                    {{ vehicle.chassis_number[-6:] }}
+                </td>
+            </tr>
+            <tr>
+                <td class=" text-small" style="font-size: 8px; text-align:center;  ">
+                    SON 6 HANE
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<table class="beyin-bordered-table">
+    {% for feature in pckg_report.features %}
+    <tr>
+        <td class="beyin-td" >
+            <!-- Get the image URL based on the feature name -->
+            {% set image_url = obd_mapping.get(feature.name, default_image_url) %}
+            <img style="width: 60px;" src="{{ image_url }}" alt="{{ feature.name }}">
+        </td>
+        <td class="beyin-td">{{ feature.name }}</td>
+        <td class="beyin-td">
+            <div class="beyin-status-container">
+                {% if feature.status == 'ARIZA KAYDI YOK' %}
+                    <span class="beyin-status-icon">
+                        <i class="fas fa-check"></i> <!-- Font Awesome check icon -->
+                    </span>
+                    <span class="beyin-status-text">{{ feature.status }}</span>
+                {% elif feature.status == 'HATA KAYDI VAR' %}
+                    <span class="beyin-status-icon" style="color: #c91d1d;">
+                        <i class="fas fa-times"></i> <!-- Font Awesome cross icon -->
+                    </span>
+                    <span class="beyin-status-text">{{ feature.status }}</span>
+                {% else %}
+                    <span class="beyin-status-icon" style="color: #c91d1d;">
+                        <i class="fas fa-times"></i> <!-- Font Awesome cross icon -->
+                    </span>
+                    <span class="beyin-status-text">{{ feature.status }}</span>
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

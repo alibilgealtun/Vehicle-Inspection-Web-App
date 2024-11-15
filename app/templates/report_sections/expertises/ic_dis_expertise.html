@@ -1,0 +1,174 @@
+<style>
+    /* Custom radio button styling */
+    input[type="radio"] {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 24px;
+        height: 24px;
+        border: 2px solid #4A5568; /* Border color */
+        border-radius: 50%;
+        outline: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    input[type="radio"]:checked {
+        border-color: #38B2AC; /* Border color when checked */
+        background-color: #38B2AC; /* Background color when checked */
+    }
+
+    input[type="radio"]:checked::before {
+        content: '';
+        display: block;
+        width: 12px;
+        height: 12px;
+        margin: 4px;
+        background-color: #38B2AC; /* Inner circle color when checked */
+        border-radius: 50%;
+    }
+
+    input[type="radio"]:hover {
+        border-color: #68D391; /* Border color on hover */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 12px;
+        border-bottom: 1px solid #E2E8F0;
+    }
+
+    th {
+        text-align: left;
+        background-color: #F7FAFC;
+        color: #2D3748;
+        font-weight: 600;
+    }
+
+    td {
+        text-align: center;
+        color: #4A5568;
+    }
+</style>
+
+{% include 'report_sections/expertises/vehicle_header.html' %}
+
+<h2 class="text-lg font-semibold mb-4">Ekspertiz</h2>
+<p>Lütfen araçta kontrol ettiğiniz bölgelerin durumunu belirtin!</p>
+
+<form id="expertiseForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="expertise_report2_id" value="{{ expertise_report2.id if expertise_report2 else '' }}">
+
+    {% if expertise_report %}
+    <h3 class="text-md font-semibold mb-4">{{ expertise_report.expertise_type.name }}</h3>
+    <table class="min-w-full bg-white shadow-md rounded-lg mb-4">
+        <thead>
+        <tr>
+            <th class="text-left">KONTROL EDİLEN</th>
+            <th>YOK</th>
+            <th>(İYİ) KONTROLDEN GEÇTİ</th>
+            <th>(ORTA) SORUN ÇIKARABİLİR</th>
+            <th>(KÖTÜ) BAKIM GEREKLİ</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for feature in expertise_report.features %}
+        <tr>
+            <td class="text-left">{{ feature.name }}</td>
+            <td>
+                <input type="radio" name="feature_{{ feature.id }}" value="YOK" {% if feature.status == 'YOK' %}checked{% endif %}>
+            </td>
+            <td>
+                <input type="radio" name="feature_{{ feature.id }}" value="(İYİ) KONTROLDEN GEÇTİ" {% if feature.status == '(İYİ) KONTROLDEN GEÇTİ' %}checked{% endif %}>
+            </td>
+            <td>
+                <input type="radio" name="feature_{{ feature.id }}" value="(ORTA) SORUN ÇIKARABİLİR" {% if feature.status == '(ORTA) SORUN ÇIKARABİLİR' %}checked{% endif %}>
+            </td>
+            <td>
+                <input type="radio" name="feature_{{ feature.id }}" value="(KÖTÜ) BAKIM GEREKLİ" {% if feature.status == '(KÖTÜ) BAKIM GEREKLİ' %}checked{% endif %}>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    {% if expertise_report2 %}
+    <h3 class="text-md font-semibold mb-4">{{ expertise_report2.expertise_type.name }}</h3>
+    <table class="min-w-full bg-white shadow-md rounded-lg mb-4">
+        <thead>
+        <tr>
+            <th class="text-left">KONTROL EDİLEN</th>
+            <th>YOK</th>
+            <th>(İYİ) KONTROLDEN GEÇTİ</th>
+            <th>(ORTA) SORUN ÇIKARABİLİR</th>
+            <th>(KÖTÜ) BAKIM GEREKLİ</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for feature in expertise_report2.features %}
+        <tr>
+            <td class="text-left">{{ feature.name }}</td>
+            <td>
+                <input type="radio" name="feature_{{ feature.id }}" value="YOK" {% if feature.status == 'YOK' %}checked{% endif %}>
+            </td>
+            <td>
+                <input type="radio" name="feature_{{ feature.id }}" value="(İYİ) KONTROLDEN GEÇTİ" {% if feature.status == '(İYİ) KONTROLDEN GEÇTİ' %}checked{% endif %}>
+            </td>
+            <td>
+                <input type="radio" name="feature_{{ feature.id }}" value="(ORTA) SORUN ÇIKARABİLİR" {% if feature.status == '(ORTA) SORUN ÇIKARABİLİR' %}checked{% endif %}>
+            </td>
+            <td>
+                <input type="radio" name="feature_{{ feature.id }}" value="(KÖTÜ) BAKIM GEREKLİ" {% if feature.status == '(KÖTÜ) BAKIM GEREKLİ' %}checked{% endif %}>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    <!-- Technician Comment Section -->
+    <div class="mb-4">
+        <label for="technician_comment" class="block text-gray-700 font-semibold mb-2">TEKNİSYEN YORUMU</label>
+        <textarea id="technician_comment" name="technician_comment" rows="4" class="w-full p-2 border border-gray-300 rounded" placeholder="Teknisyenin yorumunu buraya yazın...">{{ expertise_report.comment if expertise_report else '' }}{{ expertise_report2.comment if expertise_report2 else '' }}</textarea>
+    </div>
+
+    <div class="flex justify-end mt-4">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Güncelle</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+        $('#expertiseForm').on('submit', function(event) {
+            event.preventDefault();  // Formun geleneksel yöntemle gönderilmesini engelle
+
+            // expertise_report2_id'yi kontrol et ve ayarla
+            let expertiseReport2Id = $('input[name="expertise_report2_id"]').val();
+            if (!expertiseReport2Id) {
+                expertiseReport2Id = "{{ expertise_report2.id if expertise_report2 else '' }}";
+                $('input[name="expertise_report2_id"]').val(expertiseReport2Id);
+            }
+
+            $.ajax({
+                url: "{{ url_for('reports.expertise_detail', expertise_report_id=expertise_report.id) }}",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(response) {
+                    alert("Ekspertiz durumu başarıyla güncellendi!");
+                },
+                error: function(error) {
+                    console.log("Error:", error);
+                    alert("Rapor güncellenemedi. Bir sorun olmadığına emin olun!");
+                }
+            });
+        });
+    });
+
+
+</script>

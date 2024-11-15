@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapor Oluştur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+{% include 'navbar.html' %}
+<div id="createAppointmentModal"></div>
+
+<!-- Main Content -->
+<main class="container mx-auto px-4 py-6">
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Rapor Oluştur</h2>
+
+        <form action="{{ url_for('reports.add_report') }}" method="POST" class="space-y-6">
+            {{ form.hidden_tag() }}
+
+            <!-- Inspection Information Section -->
+            <div class="grid grid-cols-2 gap-6">
+                <!-- Left Section (Inspection Info, Customer Info & Representative Info) -->
+                <div class="col-span-1 space-y-6">
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                        {% include 'report_sections/inspection_info.html' %}
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                        {% include 'report_sections/customer_info.html' %}
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                        {% include 'report_sections/representative_info.html' %}
+                    </div>
+                </div>
+
+                <!-- Right Section (Vehicle Info & Owner Info) -->
+                <div class="col-span-1 space-y-6">
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                        {% include 'report_sections/vehicle_info.html' %}
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                        {% include 'report_sections/owner_info.html' %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit and Cancel Buttons -->
+            <div class="p-1">
+                {% include 'report_sections/submit_buttons.html' %}
+            </div>
+        </form>
+    </div>
+</main>
+<script src="../static/js/report.js"></script>
+<script src="../static/js/appointment.js"></script>
+
+</body>
+
+</html>

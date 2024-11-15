@@ -1,0 +1,27 @@
+<!-- Content for Fatura Bilgileri -->
+<form action="{{ url_for('companies.update_company') }}" method="POST" class="space-y-4">
+    {{ form.hidden_tag() }}
+    <div class="grid grid-cols-1 gap-6 mt-4">
+        <div>
+            <label for="company_title" class="block text-sm font-medium text-gray-700">Firma Ünvanı</label>
+            <input type="text" name="company_title" id="company_title" value="{{ company.company_title }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div>
+            <label for="tax_office" class="block text-sm font-medium text-gray-700">Vergi Dairesi</label>
+            <input type="text" name="tax_office" id="tax_office" value="{{ company.tax_office }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div>
+            <label for="tax_number" class="block text-sm font-medium text-gray-700">Vergi No</label>
+            <input type="text" name="tax_number" id="tax_number" value="{{ company.tax_number }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+        <div>
+            <label for="city" class="block text-sm font-medium text-gray-700">Şehir</label>
+            <input type="text" name="city" id="city" value="{{ company.city }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+    </div>
+    <!-- Submit and Cancel Buttons -->
+    <div class="flex justify-end space-x-4 mt-6">
+        <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded shadow">KAYDET</button>
+        <a href="{{ url_for('companies.company_detail') }}" class="bg-gray-500 text-white px-4 py-2 rounded shadow">VAZGEÇ</a>
+    </div>
+</form>

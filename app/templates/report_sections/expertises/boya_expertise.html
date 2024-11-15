@@ -1,0 +1,138 @@
+<style>
+    /* General Styles */
+    .expertise-section {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+    }
+
+    .form-section {
+        width: 50%;
+    }
+
+    .car-image-section {
+        width: 40%;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .dropdown {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #CBD5E0;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+        color: #4A5568;
+        outline: none;
+        cursor: pointer;
+        transition: border-color 0.3s ease;
+    }
+
+    .dropdown:hover, .dropdown:focus {
+        border-color: #3182CE;
+    }
+
+    .extra-conditions {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: #718096;
+    }
+
+    .extra-conditions span {
+        background-color: #EDF2F7;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+        margin-right: 0.5rem;
+    }
+
+    .car-image {
+        max-width: 100%;
+        margin-top: 1.5rem;
+    }
+
+    .feature-selected {
+        background-color: #38B2AC;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        padding: 0.75rem;
+        border-radius: 0.375rem;
+    }
+</style>
+
+<div class="expertise-section">
+    <!-- Form Section -->
+    <div class="form-section">
+        {% for feature in expertise_report.features %}
+        <div class="form-group" id="feature-{{ feature.id }}">
+            <label for="feature-status-{{ feature.id }}">{{ feature.name }}</label>
+            <select class="dropdown" id="feature-status-{{ feature.id }}" name="feature_{{ feature.id }}">
+                <option value="ORİJİNAL" {% if feature.status == 'ORİJİNAL' %}selected{% endif %}>ORİJİNAL</option>
+                <option value="PLASTİK" {% if feature.status == 'PLASTİK' %}selected{% endif %}>PLASTİK</option>
+                <option value="BOYALI" {% if feature.status == 'BOYALI' %}selected{% endif %}>BOYALI</option>
+                <option value="LOKAL BOYALI" {% if feature.status == 'LOKAL BOYALI' %}selected{% endif %}>LOKAL BOYALI</option>
+                <option value="DEĞİŞMİŞ" {% if feature.status == 'DEĞİŞMİŞ' %}selected{% endif %}>DEĞİŞMİŞ</option>
+                <option value="KAPLAMA" {% if feature.status == 'KAPLAMA' %}selected{% endif %}>KAPLAMA</option>
+                <option value="YOK" {% if feature.status == 'YOK' %}selected{% endif %}>YOK</option>
+            </select>
+            <div class="extra-conditions" id="extra-conditions-{{ feature.id }}">
+                <!-- Selected extra conditions will appear here -->
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Car Image Section -->
+    <div class="car-image-section">
+        <img src="https://placehold.co/400x300" alt="Car Image" class="car-image">
+    </div>
+</div>
+
+<div class="flex justify-end mt-4">
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">KAYDET</button>
+</div>
+
+<script>
+    // JavaScript to handle dropdown selections and extra conditions
+    document.addEventListener("DOMContentLoaded", function() {
+        const featureElements = document.querySelectorAll(".form-group");
+
+        featureElements.forEach(function(element) {
+            const dropdown = element.querySelector(".dropdown");
+            const extraConditionsDiv = element.querySelector(".extra-conditions");
+
+            dropdown.addEventListener("change", function() {
+                const selectedValue = dropdown.value;
+                const extraConditions = ["SÖKÜLMÜŞ / TAKILMIŞ", "BOYASIZ GÖÇÜK", "EZİK-ÇİZİK", "VERNİK"];
+                let selectedExtras = [];
+
+                // Simulate selecting extra conditions based on the selected value
+                if (selectedValue !== "ORİJİNAL") {
+                    selectedExtras = extraConditions.slice(0, Math.floor(Math.random() * extraConditions.length) + 1);
+                }
+
+                // Update the extra conditions div
+                extraConditionsDiv.innerHTML = selectedExtras.map(extra => `<span>${extra}</span>`).join("");
+
+                // Change the appearance of the feature based on the selection
+                if (selectedValue !== "ORİJİNAL") {
+                    element.classList.add("feature-selected");
+                } else {
+                    element.classList.remove("feature-selected");
+                }
+            });
+
+            // Trigger the change event on load to apply the correct styles
+            dropdown.dispatchEvent(new Event("change"));
+        });
+    });
+</script>

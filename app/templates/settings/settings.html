@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firma Ayarları</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+{% include 'navbar.html' %}
+
+<!-- Main Content -->
+<main class="container mx-auto px-4 py-6">
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Firma Ayarları</h2>
+
+        <!-- Tabs Navigation -->
+        {% include 'settings/tabs.html' %}
+
+        <form action="{{ url_for('companies.update_company', company_id=company.id) }}" method="POST" class="space-y-4">
+            {{ form.hidden_tag() }}
+
+            <!-- Tab 1: Firma Bilgileri -->
+            <div id="tab1" class="tab-content active">
+                {% include 'settings/company.html' %}
+            </div>
+
+            <!-- Tab 2: Yetkili Bilgileri -->
+            <div id="tab2" class="tab-content">
+                {% include 'settings/staff.html' %}
+            </div>
+
+            <!-- Tab 3: Fatura Bilgileri -->
+            <div id="tab3" class="tab-content">
+                {% include 'settings/receipt.html' %}
+            </div>
+
+
+            <!-- Tab 4: Rapor Tasarımı -->
+            <div id="tab4" class="tab-content">
+                <!-- Content for Rapor Tasarımı -->
+                <!-- ... (Rest of the form content) -->
+            </div>
+
+            <!-- Tab 4: Rapor Ayarları -->
+            <div id="tab5" class="tab-content">
+                {% include 'settings/report.html' %}
+            </div>
+
+
+
+        </form>
+    </div>
+</main>
+
+<!-- Include the settings.js file -->
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+</body>
+
+</html>

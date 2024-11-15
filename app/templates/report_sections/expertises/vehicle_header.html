@@ -1,0 +1,29 @@
+<!-- templates/partials/report_header.html -->
+<div class="bg-white shadow-md rounded-lg p-4 mb-4">
+    <div class="grid grid-cols-6 gap-4">
+        <div>
+            <label class="text-gray-600">Plaka</label>
+            <div class="bg-gray-100 rounded px-3 py-2">{{ report.vehicle.plate }}</div>
+        </div>
+        <div>
+            <label class="text-gray-600">Marka / Model</label>
+            <div class="bg-gray-100 rounded px-3 py-2">{{ report.vehicle.brand }} / {{ report.vehicle.model }}</div>
+        </div>
+        <div>
+            <label class="text-gray-600">Şasi No</label>
+            <div class="bg-gray-100 rounded px-3 py-2">{{ report.vehicle.chassis_number }}</div>
+        </div>
+        <div>
+            <label class="text-gray-600">Vites Türü / Yakıt Türü</label>
+            <div class="bg-gray-100 rounded px-3 py-2">{{ report.vehicle.transmission_type.value }} / {{ report.vehicle.fuel_type.value }}</div>
+        </div>
+        <div>
+            <label class="text-gray-600">Model Yılı</label>
+            <div class="bg-gray-100 rounded px-3 py-2">{{ report.vehicle.model_year }}</div>
+        </div>
+        <div>
+            <label class="text-gray-600">Araç KM/MiL</label>
+            <div class="bg-gray-100 rounded px-3 py-2">{{ report.vehicle.mileage }}</div>
+        </div>
+    </div>
+</div>

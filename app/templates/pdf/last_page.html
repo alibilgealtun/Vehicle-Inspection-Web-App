@@ -1,0 +1,81 @@
+
+    <style>
+        .last-page-container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .last-page-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .last-page-content ul {
+            list-style-type: none;
+            padding-left: 0;
+            counter-reset: item; /* Reset counter at the start of the list */
+        }
+
+        .last-page-content li {
+            margin-bottom: 15px;
+            counter-increment: item; /* Increment counter for each list item */
+        }
+
+        .last-page-content li::before {
+            content: counter(item) ". "; /* Use the counter for the numbering */
+            font-weight: bold;
+        }
+        .footer-text {
+            padding: 20px;
+            font-size: 12px; /* Smaller font size */
+            color: #888; /* Gray color */
+        }
+    </style>
+<div class="title-large primary-color primary-bg-color" style="position: relative; padding: 15px;">
+    <span style="color: white;">HİZMET SÖZLEŞMESİ</span>
+    <div class="sasi-wrapper" style="position: absolute; right: 1%; top: 50%; transform: translateY(-50%); padding: 0 10px; background-color: white; border-left: 0;">
+        <table width="100%">
+            <tbody>
+            <tr>
+                <td class="" style="font-size: 12px; font-weight: bold; ">
+                    ŞASİ NO<span style="font-size: 14px; ">:</span>
+                </td>
+                <td class=" text-medium" rowspan="2" style="font-size: 20px; font-weight: bold;">
+                    {{ vehicle.chassis_number[-6:] }}
+                </td>
+            </tr>
+            <tr>
+                <td class=" text-small" style="font-size: 8px; text-align:center;  ">
+                    SON 6 HANE
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="last-page-container">
+    <div class="last-page-content">
+        <ul>
+            <li>{{ company.name }} ekspertiz anında ki aracın hatalarını ve kazalarını kontrol ederek o anki mevcut durumu hakkında sizi bilgilendirir.</li>
+            <li>Ekspertiz sonucunda çıkan ekspertiz raporunda bazı kontrol noktalarının olumlu sonuçlar vermesi ileride hata veya sorun çıkartmayacağı anlamına gelmez.</li>
+            <li>Satıcı tarafından gizlenmiş kusurların tespit edilememesinden {{ company.name }}; firması sorumlu tutulamaz.</li>
+            <li>{{ company.name }}; firması araç alım satım firması değildir, netice itibari ekspertiz kontrolleri yapılan araçta gözden kaçan ve gizlenen bir kusur var ise, bunun muhatabı firmamız değil araç satıcısıdır.</li>
+            <li>Raporladığı km veya mil bilgisi, aracın km veya mil göstergesi panosundan okunarak km veya mil bilgisidir. Gösterge panosundaki km veya mil bilgisinin gerçeği yansıtıyor olması {{ company.name }}; firmasının sorumluluğunda değildir.</li>
+            <li>{{ company.name }}; Firması Air bag (Hava Yastığı) - Göğüs Kontrolü Yapmaz.</li>
+            <li>{{ company.name }}; firması hasar kaydı, ağır hasar kaydı, tramer kaydı sorgulaması yapmaz.</li>
+            <li>Araçta bilinmeyen bazı kusurlar test esnasında gün yüzüne çıkabilir, test esnasında doğabilecek kusurlardan {{ company.name }}; firması sorumlu tutulamaz.</li>
+            <li>Satıcı tarafından gizlenen ve aracın çalıntı veya change olmasından firmamız sorumlu değildir. EGM'de sorgulanması alıcı tarafından yapılmalıdır.</li>
+            <li>İş bu ekspertiz raporu İŞ EMRİ / ARAÇ KABUL / TESLİM / BİLGİ formunda yer alan “Ekspertiz Talep Eden Müşteri” bölümünde yer alan bilgilere istinaden, www.ekspertiz.online firmasına ait yazılım kullanılarak hazırlanmış olup, ekspertiz raporu üzerinde yer alan bilgilerin doğruluğundan {{ company.name }} firması sorumludur.</li>
+        </ul>
+    </div>
+
+</div>
+
+      <div class="footer-text">
+        BU RAPOR ŞASE NUMARASININ AYNI OLDUĞU İŞ EMRİ / ARAÇ KABUL / TESLİM / BİLGİ FORMU İLE BİR BÜTÜNDÜR VE RAPORUN DEVAMIDIR. <br>
+          ARAÇ KABUL BİLGİ FORMUNDA BULUNAN İMZA İLE BU SAYFADA YER ALAN TÜM ŞARTLARI KABUL ETMİŞ OLURSUNUZ.
+    </div>

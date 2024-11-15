@@ -1,0 +1,116 @@
+<div class="grid grid-cols-2 gap-6">
+    <!-- Vehicle Plate -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Plaka</label>
+        <input type="text" name="vehicle_plate" id="vehicle_plate"
+               value="{{ vehicle_info.plate if vehicle_info else '' }}"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+               required>
+    </div>
+
+    <!-- Brand -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Marka</label>
+        <input type="text" name="brand" id="brand"
+               value="{{ vehicle_info.brand if vehicle_info else '' }}"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+               required>
+    </div>
+
+    <!-- Model -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Model</label>
+        <input type="text" name="model" id="model"
+               value="{{ vehicle_info.model if vehicle_info else '' }}"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+               required>
+    </div>
+
+
+    <!-- Model Year -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Model Yılı</label>
+        <select name="model_year" id="model_year"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                required>
+            <option value="">--Seçiniz--</option>
+            {% for year in range(current_year, 1970, -1) %}
+            <option value="{{ year }}" {% if vehicle_info and vehicle_info.model_year == year %}selected{% endif %}>
+                {{ year }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Gear Type -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Vites Türü</label>
+        <select name="gear_type" id="gear_type"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                required>
+            <option value="">--Seçiniz--</option>
+            {% for gear_name, gear_value in transmission_types %}
+            <option value="{{ gear_name }}" {% if vehicle_info and vehicle_info.transmission_type == gear_name %}selected{% endif %}>
+                {{ gear_value }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Engine Number -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Motor No</label>
+        <input type="text" name="engine_number" id="engine_number"
+               value="{{ vehicle_info.engine_number if vehicle_info else '' }}"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+    </div>
+
+    <!-- Chassis Number -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Şasi No</label>
+        <input type="text" name="chassis_number" id="chassis_number"
+               value="{{ vehicle_info.chassis_number if vehicle_info else '' }}"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+               required>
+    </div>
+
+    <!-- Vehicle Color -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Araç Rengi</label>
+        <select name="color" id="color"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                required>
+            <option value="">--Seçiniz--</option>
+            {% for color_name, color_value in colors %}
+            <option value="{{ color_name }}" {% if vehicle_info and vehicle_info.color == color_name %}selected{% endif %}>
+                {{ color_value }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Fuel Type -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Yakıt Türü</label>
+        <select name="fuel_type" id="fuel_type"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                required>
+            <option value="">--Seçiniz--</option>
+            {% for fuel_name, fuel_value in fuel_types %}
+            <option value="{{ fuel_name }}" {% if vehicle_info and vehicle_info.fuel_type == fuel_name %}selected{% endif %}>
+                {{ fuel_value }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Vehicle KM/Mileage -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Araç KM / Mil</label>
+        <input type="text" name="vehicle_km" id="vehicle_km"
+               value="{{ vehicle_info.mileage if vehicle_info else '' }}"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+               required>
+    </div>
+</div>
+

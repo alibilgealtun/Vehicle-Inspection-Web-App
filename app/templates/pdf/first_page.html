@@ -1,0 +1,178 @@
+<div class="header-section">
+    İŞ EMRİ / ARAÇ KABUL / TESLİM / BİLGİ FORMU
+</div>
+<div class="main-container">
+    <!-- Sol taraftaki tablo -->
+    <div class="table-container">
+        <table class="bordered-table">
+            <tr>
+                <th>İŞ EMRİNİ AÇAN</th>
+                <td>{{ staff.full_name }}</td>
+            </tr>
+            <tr>
+                <th>ARAÇ KABUL TARİHİ</th>
+                <td>{{  report.created_at  }}</td>
+            </tr>
+            <tr>
+                <th>ARAÇ KABUL SAATİ</th>
+                <td>{{  report.created_at  }}</td>
+            </tr>
+            <tr>
+                <th>ARAÇ TESLİM SAATİ</th>
+                <td>{{ report.finished_at }}</td>
+            </tr>
+            <tr>
+                <th>ARAÇ GİRİŞ KM/MİL</th>
+                <td>{{ vehicle.mileage }}</td>
+            </tr>
+            <tr>
+                <th>ARAÇ TESLİM KM/MİL</th>
+                <td>{{ vehicle.mileage + 1 }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Sağ taraftaki talep edilen ekspertiz test & kontroller -->
+    <div class="table-container">
+        <div class="section-title" style="background-color: #a82b2e; color: white; padding: 5px;">
+            TALEP EDİLEN EKSPERTİZ TEST & KONTROLLER
+        </div>
+        <table class="checkbox-table">
+            <tr>
+                <td style="width: 50%; vertical-align: top;">
+                    <table style="width: 100%;">
+                        {% set left_tests = [
+                        'Motor Ekspertiz',
+                        'Yanal Kayma Ekspertiz',
+                        'Süspansiyon Ekspertiz',
+                        'Fren Ekspertiz',
+                        'Beyin Ekspertiz'] %}
+                        {% for test in left_tests %}
+                        <tr>
+                            <td style="padding: 5px 0;">
+                                <div class="checkbox {% if test in package_expertise_reports | map(attribute='expertise_type_name') %}checked{% endif %}"></div>
+                                <span style="font-size: 12px; font-weight: bold;">{{ test }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+                <td style="width: 50%; vertical-align: top;">
+                    <table style="width: 100%;">
+                        {% set right_tests = [
+                        'Mekanik Ekspertiz',
+                        'İç & Dış Ekspertiz',
+                        'Yol & Dyno Ekspertiz',
+                        'Boya & Kaporta Ekspertiz'
+                        ] %}
+
+                        {% for test in right_tests %}
+                        <tr>
+                            <td style="padding: 5px 0;">
+                                <div class="checkbox {% if test in package_expertise_reports | map(attribute='expertise_type_name') %}checked{% endif %}"></div>
+                                <span style="font-size: 12px; font-weight: bold;">{{ test }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<div class="section-title">
+    ARAÇ BİLGİLERİ
+</div>
+
+<table class="bordered-table">
+    <tr>
+        <th>MARKA</th>
+        <td>{{ vehicle.brand }}</td>
+    </tr>
+    <tr>
+        <th>MODEL</th>
+        <td>{{ vehicle.model }} ({{ vehicle.transmission_type.value }}) ({{ vehicle.color.value }})</td>
+    </tr>
+    <tr>
+        <th>ÜRETİM YILI</th>
+        <td>{{ vehicle.model_year }}</td>
+    </tr>
+    <tr>
+        <th>PLAKA</th>
+        <td>{{ vehicle.plate }}</td>
+    </tr>
+    <tr>
+        <th>MOTOR NO</th>
+        <td>{{ vehicle.engine_number}}</td>
+    </tr>
+    <tr>
+        <th>ŞASİ NO</th>
+        <td>VSSZZZ5FZGR143288</td>
+    </tr>
+    <tr>
+        <th>YAKIT CİNSİ</th>
+        <td>{{  vehicle.fuel_type.value }}</td>
+    </tr>
+</table>
+
+<div class="section-title">
+    EKSPERTİZ TALEP EDEN MÜŞTERİ BİLGİLERİ
+</div>
+
+<table class="bordered-table">
+    <tr>
+        <th>AD & SOYAD</th>
+        <td>{{ customer.full_name }}</td>
+        <th>TELEFON</th>
+        <td>{{ customer.phone }}</td>
+    </tr>
+    <tr>
+        <th>T.C / VERGİ NO</th>
+        <td>{{ customer.tax_id }}</td>
+        <th>E-POSTA</th>
+        <td>{{ customer.email }}</td>
+    </tr>
+    <tr>
+        <th>ADRES</th>
+        <td colspan="3">{{ customer.address }}</td>
+    </tr>
+</table>
+
+
+<table class="bordered-table">
+    <tr>
+        <td style="text-align: center; color:#A82B2E; font-weight: bold;">RUHSATIN ASLI GÖRÜLDÜ MÜ?</td>
+        <td style="text-align: center;">
+            <div class="checkbox {% if report.registration_document_seen %}checked{% endif %}"></div> EVET
+            <div class="checkbox {% if not report.registration_document_seen %}checked{% endif %}" style="margin-left:20px;"></div> HAYIR
+        </td>
+    </tr>
+</table>
+
+<div class="signature-section" style="display: table; width: 100%; table-layout: fixed; border-collapse: collapse;">
+    <!-- FİRMA kısmı -->
+    <div class="signature-box" style="display: table-cell; width: 25%; font-weight: bold; color: white; padding:0; border: 1px solid #dcdcdc;">
+        <h1 style="background-color: #a82b2e; margin:0; font-size:10px; padding:6px; text-align: center;">FİRMA</h1>
+        <p style="color: #d3d3d3; height:30px; text-align:center; margin: 0; padding-top: 5px;">AD SOYAD - İMZA</p>
+    </div>
+
+    <!-- Metin kısmı -->
+    <div style="display: table-cell; width: 40%; padding: 10px 15px; border: 1px solid #dcdcdc; font-size: 10px; vertical-align: top;">
+        Bu işyerinde belirtilen işlemlerin yapılması için {{ company.name }} servisini yetkili kılıyorum. Hizmet sözleşmesi sayfasında yer alan şartları okudum ve kabul ediyorum. Ekspertiz tamamlandığında bilgilendirileceğim ve aracı teslim alacağım. Bu süreç zarfında aracın ekspertiz merkezinde getirdiği kilometre ve merkezden çıkış yaptığı kilometrelere rıza gösterdim. Ekspertiz, motor sökmeden yapılacaktır. Dinomometre testinden önce ve test sırasında oluşabilecek motor, şanzıman ve araçtaki diğer arızalardan
+        {{  company.name }} firması sorumlu değildir.
+    </div>
+
+    <!-- MÜŞTERİ kısmı -->
+    <div class="signature-box" style="display: table-cell; width: 25%; font-weight: bold; color: white; padding:0; border: 1px solid #dcdcdc;">
+        <h1 style="background-color: #a82b2e; margin:0; font-size:10px; padding:6px; text-align: center;">MÜŞTERİ</h1>
+        <p style="color: #d3d3d3; height:30px; text-align:center; margin: 0; padding-top: 5px;">AD SOYAD - İMZA</p>
+    </div>
+</div>
+
+<footer class="footer" >
+    <p>{{ company.name }}</p>
+    <p><strong>ADRES :</strong> {{ company.address }}</p>
+    <p><strong>TELEFON :</strong> {{ company.phone_1 }} &nbsp;&nbsp; <strong>E-POSTA :</strong> {{ company.email}}</p>
+</footer>

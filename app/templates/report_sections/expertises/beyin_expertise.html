@@ -1,0 +1,107 @@
+<style>
+    /* Custom radio button styling */
+    input[type="radio"] {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 24px;
+        height: 24px;
+        border: 2px solid #4A5568; /* Border color */
+        border-radius: 50%;
+        outline: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    input[type="radio"]:checked {
+        border-color: #38B2AC; /* Border color when checked */
+        background-color: #38B2AC; /* Background color when checked */
+    }
+
+    input[type="radio"]:checked::before {
+        content: '';
+        display: block;
+        width: 12px;
+        height: 12px;
+        margin: 4px;
+        background-color: #38B2AC; /* Inner circle color when checked */
+        border-radius: 50%;
+    }
+
+    input[type="radio"]:hover {
+        border-color: #68D391; /* Border color on hover */
+    }
+</style>
+
+{% include 'report_sections/expertises/vehicle_header.html' %}
+
+<!-- templates/expertises/beyin_expertise.html -->
+<h2 class="text-lg font-semibold mb-4">{{ expertise_report.expertise_type.name }} Ekspertiz Detayı</h2>
+<p>Lütfen beyinle ilgili durumu belirtin!</p>
+
+<form id="expertiseForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <!-- Table for Features -->
+    <table class="min-w-full table-auto bg-white shadow-md rounded-lg mb-4">
+        <thead class="bg-gray-200">
+        <tr>
+            <th class="px-4 py-2 text-left">Kontrol Edilen</th>
+            <th class="px-4 py-2 text-center">ARIZA KAYDI YOK</th>
+            <th class="px-4 py-2 text-center">HATA KAYDI VAR</th>
+            <th class="px-4 py-2 text-center">BAĞLANTI KURULAMADI</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for feature in expertise_report.features %}
+        <tr class="border-b">
+            <td class="px-4 py-2">{{ feature.name }}</td>
+            <td class="px-4 py-2 text-center">
+                <input type="radio" name="feature_{{ feature.id }}" value="ARIZA KAYDI YOK" {% if feature.status == 'ARIZA KAYDI YOK' %}checked{% endif %}>
+            </td>
+            <td class="px-4 py-2 text-center">
+                <input type="radio" name="feature_{{ feature.id }}" value="HATA KAYDI VAR" {% if feature.status == 'HATA KAYDI VAR' %}checked{% endif %}>
+            </td>
+            <td class="px-4 py-2 text-center">
+                <input type="radio" name="feature_{{ feature.id }}" value="BAĞLANTI KURULAMADI" {% if feature.status == 'BAĞLANTI KURULAMADI' %}checked{% endif %}>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Technician Comment Section -->
+    <div class="mb-4">
+        <label for="technician_comment" class="block text-gray-700 font-semibold mb-2">TEKNİSYEN YORUMU</label>
+        <textarea id="technician_comment" name="technician_comment" rows="4" class="w-full p-2 border border-gray-300 rounded" placeholder="Teknisyenin yorumunu buraya yazın...">{{ expertise_report.comment }}</textarea>
+    </div>
+
+    <div class="flex justify-end mt-4">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Güncelle</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+        $('#expertiseForm').on('submit', function(event) {
+            event.preventDefault();  // Prevent the form from submitting in the traditional way
+            $.ajax({
+                url: "{{ url_for('reports.expertise_detail', expertise_report_id=expertise_report.id) }}",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if(response.success) {
+                        alert("Ekspertiz durumu başarıyla güncellendi!");
+                    } else {
+                        alert("Güncelleme sırasında bir sorun oluştu.");
+                    }
+                },
+                error: function(error) {
+                    console.log("Error:", error);
+                    alert("Rapor güncellenemedi. Bir sorun olmadığına emin olun!");
+                }
+            });
+        });
+    });
+
+</script>

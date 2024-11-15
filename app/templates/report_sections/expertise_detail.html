@@ -1,0 +1,51 @@
+<!-- partials/expertise_detail.html -->
+<h2 class="text-lg font-semibold mb-4">{{ expertise_report.expertise_type.name }} Ekspertiz Detayı</h2>
+<p class="mb-4">Lütfen araçta kontrol ettiğiniz bölgelerin durumunu belirtin!</p>
+
+<form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <table class="min-w-full table-auto bg-white shadow-md rounded-lg">
+        <thead class="bg-gray-200">
+        <tr>
+            <th class="px-4 py-2 text-left">Kontrol Edilen</th>
+            {% if expertise_report.features[0].status is number %}
+            <th class="px-4 py-2 text-center">Durum</th>
+            {% else %}
+            <th class="px-4 py-2 text-center">Seçenekler</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for feature in expertise_report.features %}
+        <tr class="border-b">
+            <td class="px-4 py-2">{{ feature.name }}</td>
+
+            {% if feature.status is number %}
+            <td class="px-4 py-2 text-center">
+                <input type="number" name="feature_{{ feature.id }}" value="{{ feature.status }}" class="w-full text-center">
+            </td>
+            {% else %}
+            {% if feature.status in ["YOK", "Kontrolden Geçti", "Sorun Çıkarabilir", "Bakım Gerekli"] %}
+            <td class="px-4 py-2 text-center">
+                <input type="radio" name="feature_{{ feature.id }}" value="YOK" {% if feature.status == 'YOK' %}checked{% endif %}> YOK
+                <input type="radio" name="feature_{{ feature.id }}" value="Kontrolden Geçti" {% if feature.status == 'Kontrolden Geçti' %}checked{% endif %}> Kontrolden Geçti
+                <input type="radio" name="feature_{{ feature.id }}" value="Sorun Çıkarabilir" {% if feature.status == 'Sorun Çıkarabilir' %}checked{% endif %}> Sorun Çıkarabilir
+                <input type="radio" name="feature_{{ feature.id }}" value="Bakım Gerekli" {% if feature.status == 'Bakım Gerekli' %}checked{% endif %}> Bakım Gerekli
+            </td>
+            {% elif feature.status in ["ARIZA KAYDI YOK", "HATA KAYDI VAR", "BAĞLANTI KURULAMADI"] %}
+            <td class="px-4 py-2 text-center">
+                <input type="radio" name="feature_{{ feature.id }}" value="ARIZA KAYDI YOK" {% if feature.status == 'ARIZA KAYDI YOK' %}checked{% endif %}> ARIZA KAYDI YOK
+                <input type="radio" name="feature_{{ feature.id }}" value="HATA KAYDI VAR" {% if feature.status == 'HATA KAYDI VAR' %}checked{% endif %}> HATA KAYDI VAR
+                <input type="radio" name="feature_{{ feature.id }}" value="BAĞLANTI KURULAMADI" {% if feature.status == 'BAĞLANTI KURULAMADI' %}checked{% endif %}> BAĞLANTI KURULAMADI
+            </td>
+            {% endif %}
+            {% endif %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="flex justify-end mt-4">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Güncelle</button>
+    </div>
+</form>

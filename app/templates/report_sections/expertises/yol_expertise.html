@@ -1,0 +1,77 @@
+<style>
+    /* General styling for form elements */
+    .form-section {
+        margin-bottom: 1rem;
+    }
+
+    .form-section label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #CBD5E0;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+        color: #4A5568;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    textarea:focus {
+        border-color: #38B2AC;
+        box-shadow: 0 0 0 3px rgba(56, 178, 172, 0.5);
+    }
+
+    button[type="submit"] {
+        background-color: #3182CE;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 0.375rem;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #2B6CB0;
+    }
+</style>
+
+{% include 'report_sections/expertises/vehicle_header.html' %}
+<form id="expertiseForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<!-- Technician Comment Section -->
+<div class="mb-4">
+    <label for="technician_comment" class="block text-gray-700 font-semibold mb-2">TEKNİSYEN YORUMU</label>
+    <textarea id="technician_comment" name="technician_comment" rows="4" class="w-full p-2 border border-gray-300 rounded" placeholder="Teknisyenin yorumunu buraya yazın...">{{ expertise_report.comment }}</textarea>
+</div>
+    <div class="flex justify-end mt-4">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Güncelle</button>
+    </div>
+</form>
+
+
+<script>
+    $(document).ready(function() {
+        $('#expertiseForm').on('submit', function(event) {
+            event.preventDefault();  // Prevent the form from submitting in the traditional way
+            $.ajax({
+                url: "{{ url_for('reports.expertise_detail', expertise_report_id=expertise_report.id) }}",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(response) {
+                    alert("Ekspertiz durumu başarıyla güncellendi!");
+                },
+                error: function(error) {
+                    console.log("Error:", error);
+                    alert("Rapor güncellenemedi. Bir sorun olmadığına emin olun!");
+                }
+            });
+        });
+    });
+</script>

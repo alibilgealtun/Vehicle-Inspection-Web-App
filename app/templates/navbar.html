@@ -1,0 +1,120 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<!-- navbar.html -->
+<div class="bg-blue-500 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <div class="text-white text-lg font-bold">
+            <i class="fas fa-th-large">
+            </i>
+            <a href="home.html"> </a>
+        </div>
+        <div class="flex space-x-8 text-white">
+            <!-- Ekspertiz Dropdown -->
+            <div class="navbar flex items-center space-x-2">
+                <i class="fas fa-car"></i>
+                <a href="#" class="hover:underline uppercase">Ekspertiz</a>
+                <!-- Dropdown Menu -->
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('reports.add_report') }}">Yeni Rapor Oluştur</a>
+                    <a href="{{ url_for('reports.report_list') }}">Açık Ekspertiz Raporları</a>
+                    <a href="#">Tamamlanmış Ekspertiz Raporları</a>
+                    <a href="#">İptal Edilen Ekspertiz Raporları</a>
+                </div>
+            </div>
+
+            <!-- Randevular Dropdown -->
+            <div class="navbar flex items-center space-x-2">
+                <i class="fas fa-calendar-alt"></i>
+                <a href="{{ url_for('appointments.appointment_list') }}" class="hover:underline uppercase">Randevular</a>
+                <div class="dropdown-menu">
+                    <a href="#" id="openCreateAppointmentModal">Randevu Oluştur</a>
+                    <a href="{{ url_for('appointments.appointment_list') }}">Randevuları Görüntüle</a>
+                </div>
+            </div>
+
+            <!-- İstatistikler Dropdown -->
+            <div class="navbar flex items-center space-x-2">
+                <i class="fas fa-chart-line"></i>
+                <a href="#" class="hover:underline uppercase">İstatistikler</a>
+                <div class="dropdown-menu">
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Kazançlar</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Nereden ulaştılar?</a>
+                </div>
+            </div>
+
+            <!-- Ayarlar Dropdown -->
+            <div class="navbar flex items-center space-x-2">
+                <i class="fas fa-cog"></i>
+                <a href="#" class="hover:underline uppercase">Ayarlar</a>
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('companies.company_detail') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Firma Ayarları</a>
+                    <a href="{{ url_for('packages.packages_list') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Ekspertiz Paketleri</a>
+                    <a href="{{ url_for('customers.customer_list') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Müşteriler</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Bayilik Ayarları</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Bayilik Paketleri</a>
+                    <a href="{{ url_for('staff.staff_list') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Personel Yönetimi</a>
+                </div>
+            </div>
+
+            <!-- Bakiye Dropdown -->
+            <div class="navbar flex items-center space-x-2">
+                <i class="fas fa-wallet"></i>
+                <a href="#" class="hover:underline uppercase">Bakiye İşlemleri</a>
+                <div class="dropdown-menu">
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Bakiye Yükle</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Bakiye Yüklemelerim</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Geçmiş Sorgularım</a>
+                </div>
+            </div>
+        </div>
+        <div></div>
+    </div>
+</div>
+
+
+<style>
+    /* Navbar container styling */
+    .navbar {
+        position: relative;
+        display: inline-block;
+    }
+
+    /* Dropdown menu styling */
+    .dropdown-menu {
+        visibility: hidden; /* Initially hidden */
+        opacity: 0; /* Initially transparent */
+        position: absolute;
+        left: 0;
+        margin-top: 0.5rem;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 0.375rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: visibility 0.2s, opacity 0.2s ease-in-out; /* Smooth transition */
+    }
+
+    /* Show dropdown on hover */
+    .navbar:hover .dropdown-menu,
+    .dropdown-menu:hover {
+        visibility: visible; /* Make visible */
+        opacity: 1; /* Fully opaque */
+    }
+
+    .dropdown-menu a {
+        display: block;
+        padding: 8px 16px;
+        color: #333;
+        text-decoration: none;
+    }
+
+    .dropdown-menu a:hover {
+        background-color: #f1f1f1;
+    }
+
+
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<script src="../static/js/navbar.js"></script>

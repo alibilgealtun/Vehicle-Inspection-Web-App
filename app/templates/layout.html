@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekspertiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body >
+<div class="bg-blue-500 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <div class="text-white text-lg font-bold">Başlangıç</div>
+        <div class="flex space-x-4 text-white">
+            <!-- Ekspertiz Dropdown -->
+            <div class="relative group">
+                <a href="#" class="hover:underline">Ekspertiz</a>
+                <div class="absolute left-0 mt-2 w-48 bg-white border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Yeni Rapor Oluştur</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Açık Ekspertiz Raporları</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Tamamlanmış Ekspertiz Raporları</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">İptal Edilen Ekspertiz Raporları</a>
+                </div>
+            </div>
+
+            <!-- Randevular Dropdown -->
+            <div class="relative group">
+                <a href="{{ url_for('appointments.appointment_list') }}" class="hover:underline">Randevular</a>
+                <div class="absolute left-0 mt-2 w-48 bg-white border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    <a href="#" id="openCreateAppointmentModal" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Randevu Oluştur</a>
+                    <a href="{{ url_for('appointments.appointment_list') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Randevuları Görüntüle</a>
+                </div>
+            </div>
+
+            <!-- İstatistikler Dropdown -->
+            <div class="relative group">
+                <a href="#" class="hover:underline">İstatistikler</a>
+                <div class="absolute left-0 mt-2 w-48 bg-white border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Genel Ayarlar</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Müşteriler</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Bayilik</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Personel Yönetimi</a>
+                </div>
+            </div>
+            <!-- Ayarlar Dropdown -->
+            <div class="relative group">
+                <a href="#" class="hover:underline">Ayarlar</a>
+                <div class="absolute left-0 mt-2 w-48 bg-white border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div class="relative group">
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Genel Ayarlar</a>
+                        <!-- Nested Dropdown for Genel Ayarlar -->
+                        <div class="absolute left-full top-0 ml-2 w-48 bg-white border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Firma Ayarları</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Ekspertiz Paketleri</a>
+                        </div>
+                    </div>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Müşteriler</a>
+                    <div class="relative group">
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Bayilik</a>
+                        <!-- Nested Dropdown for Bayilik -->
+                        <div class="absolute left-full top-0 ml-2 w-48 bg-white border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Bayilik Ayarları</a>
+                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Bayilik Paketleri</a>
+                        </div>
+                    </div>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Personel Yönetimi</a>
+                </div>
+            </div>
+
+
+            <div class="relative group">
+                <a href="#" class="hover:underline">Ayarlar</a>
+                <!-- Nested Dropdown for Bayilik -->
+                <div class="absolute left-0 mt-2 w-48 bg-white border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Bakiye Yükle</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Bakiye Yüklemelerim</a>
+                    <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Geçmiş Sorgularım</a>
+                </div>
+            </div>
+        </div>
+        <div class="bg-red-500 px-3 py-1 text-white rounded">BORÇ</div>
+    </div>
+</div>
+
+</body>
+</html>

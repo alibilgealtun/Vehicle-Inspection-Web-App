@@ -1,0 +1,284 @@
+<style>
+    .suspansiyonTable {
+        width: 100%;
+        height: 40vh;
+        border-collapse: collapse;
+    }
+
+    .suspansiyonTable td {
+        height: 100px; /* Set height */
+        overflow: hidden; /* Prevent overflow */
+        vertical-align: middle; /* Vertically center content */
+    }
+
+    .first-column {
+        width: 3%;
+    }
+
+    .extraSuspansiyon {
+        width: 60%; /* Remainder width */
+        padding: 50px 100px; /* Add padding around the image */
+        text-align: center; /* Center the image horizontally */
+    }
+
+    .suspansiyonImg {
+        max-height: 30%; /* Ensure the image fits within the available space */
+        width: auto; /* Maintain the aspect ratio */
+    }
+    /* Style for the labels and scale */
+    .scale-container {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .scale {
+        display: inline-block;
+        font-size: 14px;
+        letter-spacing: 2px;
+    }
+
+    .status-labels {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .status-label {
+        padding: 5px 10px;
+        color: white;
+        border-radius: 10px;
+        margin: 0 5px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .arizali {
+        background-color: #ff4d4d; /* Red */
+    }
+
+    .kontrol {
+        background-color: #ffcc00; /* Yellow */
+    }
+
+    .iyi {
+        background-color: #9933ff; /* Purple */
+    }
+
+    .cokiyi {
+        background-color: #33ccff; /* Light Blue */
+    }
+
+    .mukemmel {
+        background-color: #33cc33; /* Green */
+    }
+    .olcum.solOnSuspansiyon {
+        top: 3%;
+        left: 1%;
+        text-align:center;
+        color:white;
+    }
+    .olcum.sagOnSuspansiyon {
+        top: 3%;
+        right: 1%;
+        text-align:center;
+        color:white;
+    }
+    .olcum.solArkaSuspansiyon {
+        bottom: 10%;
+        left: 1%;
+        text-align:center;
+        color:white;
+    }
+    .olcum.sagArkaSuspansiyon{
+        bottom: 10%;
+        right: 1%;
+        text-align:center;
+        color:white;
+    }
+    .suspansiyonSpan{
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        font-size: 10px;
+        font-weight: bold;
+        border: 2px solid black;
+        color: white;
+        border-radius: 13px;
+        width: 100px;
+        height: 30px;
+        text-align: center;
+        line-height: 15px;
+    }
+    .yon.bottom.suspansiyon {
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+</style>
+
+
+{% macro get_feature_value(features, name) %}
+{% for feature in features %}
+{% if feature.name == name %}
+{{ feature.status }}
+{% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% set on_sol_fren = get_feature_value(pckg_report.features, 'SOL ÖN')|float %}
+{% set on_sag_fren = get_feature_value(pckg_report.features, 'SAĞ ÖN')|float %}
+{% set arka_sag_fren = get_feature_value(pckg_report.features, 'SAĞ ARKA')|float %}
+{% set arka_sol_fren = get_feature_value(pckg_report.features, 'SOL ARKA')|float %}
+
+<div class="title-large primary-color primary-bg-color" style="position: relative; padding: 15px;">
+    <span style="color: white;">SÜSPANSİYON & YANAL KAYMA EKSPERTİZ RAPORU</span>
+    <div class="sasi-wrapper" style="position: absolute; right: 1%; top: 50%; transform: translateY(-50%); padding: 0 10px; background-color: white; border-left: 0;">
+        <table width="100%">
+            <tbody>
+            <tr>
+                <td class="" style="font-size: 12px; font-weight: bold; ">
+                    ŞASİ NO<span style="font-size: 14px; ">:</span>
+                </td>
+                <td class=" text-medium" rowspan="2" style="font-size: 20px; font-weight: bold;">
+                    {{ vehicle.chassis_number[-6:] }}
+                </td>
+            </tr>
+            <tr>
+                <td class=" text-small" style="font-size: 8px; text-align:center;  ">
+                    SON 6 HANE
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<table class="suspansiyonTable">
+    <tr>
+        <td class="on-frenler  first-column frentd hTitle " ><span class="rotate-text">SÜSPANSİYON TESTİ</span></td>
+        <td class="extraSuspansiyon frentd" rowspan="2" width="350" valign="top">
+            <div class="aracgovde fren">
+                <div class="bg">
+                    <img class="suspansiyonImg" src="{{ fren_image_url }}" alt="Frenler">
+                    <span class="yon top">ÖN</span>
+                    <span class="yon right">SAĞ</span>
+                    <span class="yon bottom suspansiyon">ARKA</span>
+                    <span class="yon left">SOL</span>
+
+                     <div class="olcum solOnSuspansiyon suspansiyonSpan {% if on_sol_fren <= 20 %}arizali{% elif on_sol_fren <= 40 %}kontrol{% elif on_sol_fren <= 60 %}iyi{% elif on_sol_fren <= 80 %}cokiyi{% else %}mukemmel{% endif %}">
+                        <div class="suspansiyonStatus">
+                         {% if on_sol_fren <= 20 %}
+                            ARIZALI
+                        {% elif on_sol_fren <= 40 %}
+                            KONTROL
+                        {% elif on_sol_fren <= 60 %}
+                            İYİ
+                        {% elif on_sol_fren <= 80 %}
+                            ÇOK İYİ
+                        {% else %}
+                            MÜKEMMEL
+                        {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- ÖN SOL FREN -->
+                    <span class="olcum solOn">
+                        <span class="deger">
+                            <span id="olcumSolOn" class="fren-span">%{{ on_sol_fren|int }}</span>
+                        </span>
+                    </span>
+
+
+
+                     <div class="olcum sagOnSuspansiyon suspansiyonSpan {% if on_sag_fren <= 20 %}arizali{% elif on_sag_fren <= 40 %}kontrol{% elif on_sag_fren <= 60 %}iyi{% elif on_sag_fren <= 80 %}cokiyi{% else %}mukemmel{% endif %}">
+                        <div class="suspansiyonStatus">
+                            {% if on_sag_fren <= 20 %}
+                                ARIZALI
+                            {% elif on_sag_fren <= 40 %}
+                                KONTROL
+                            {% elif on_sag_fren <= 60 %}
+                                İYİ
+                            {% elif on_sag_fren <= 80 %}
+                                ÇOK İYİ
+                            {% else %}
+                                MÜKEMMEL
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- ÖN SAĞ FREN -->
+                    <span class="olcum sagOn">
+                            <span class="deger">
+                            <span id="olcumSagOn" class="fren-span">%{{ on_sag_fren|int }}</span>
+                            </span>
+                    </span>
+
+
+
+                     <div class="olcum solArkaSuspansiyon suspansiyonSpan {% if arka_sol_fren <= 20 %}arizali{% elif arka_sol_fren <= 40 %}kontrol{% elif arka_sol_fren <= 60 %}iyi{% elif arka_sol_fren <= 80 %}cokiyi{% else %}mukemmel{% endif %}">
+                        <div class="suspansiyonStatus">
+                            {% if arka_sol_fren <= 20 %}
+                                ARIZALI
+                            {% elif arka_sol_fren <= 40 %}
+                                KONTROL
+                            {% elif arka_sol_fren <= 60 %}
+                                İYİ
+                            {% elif arka_sol_fren <= 80 %}
+                                ÇOK İYİ
+                            {% else %}
+                                MÜKEMMEL
+                            {% endif %}
+                        </div>
+                    </div>
+                    <span class="olcum solArka">
+                            <span class="deger">
+                               <span id="olcumSolArka" class="fren-span">%{{ arka_sol_fren|int }}</span>
+                            </span>
+                    </span>
+
+
+
+                    <div class="olcum sagArkaSuspansiyon suspansiyonSpan {% if arka_sag_fren <= 20 %}arizali{% elif arka_sag_fren <= 40 %}kontrol{% elif arka_sag_fren <= 60 %}iyi{% elif arka_sag_fren <= 80 %}cokiyi{% else %}mukemmel{% endif %}">
+                        <div class="suspansiyonStatus">
+                            {% if arka_sag_fren <= 20 %}
+                                ARIZALI
+                            {% elif arka_sag_fren <= 40 %}
+                                KONTROL
+                            {% elif arka_sag_fren <= 60 %}
+                                İYİ
+                            {% elif arka_sag_fren <= 80 %}
+                                ÇOK İYİ
+                            {% else %}
+                                MÜKEMMEL
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- ARKA SAĞ FREN -->
+                    <span class="olcum sagArka">
+                            <span class="deger">
+                               <span id="olcumSagArka" class="fren-span">%{{ arka_sag_fren|int }}</span>
+                            </span>
+                        </span>
+                </div>
+
+            </div>
+            <div class="scale-container">
+                <div class="scale">
+                    0---10---20---30---40---50---60---70---80---90---100
+                </div>
+
+                <!-- Status Labels -->
+                <div class="status-labels">
+                    <span class="status-label arizali">ARIZALI</span>
+                    <span class="status-label kontrol">KONTROL</span>
+                    <span class="status-label iyi">İYİ</span>
+                    <span class="status-label cokiyi">ÇOK İYİ</span>
+                    <span class="status-label mukemmel">MÜKEMMEL</span>
+                </div>
+            </div>
+        </td>
+
+    </tr>
+
+</table>
+

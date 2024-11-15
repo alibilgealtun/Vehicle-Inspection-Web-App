@@ -1,0 +1,44 @@
+<style>
+    .header {
+        height: 100px;
+        color: black;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .header-content img {
+        height: 73px;
+        width: auto;
+        margin-right: 20px;
+    }
+
+    .header-text {
+        flex: 1;
+        text-align: right;
+        line-height: 1.2;
+    }
+
+
+</style>
+<header class="header">
+    <div class="header-content">
+        <div>
+    {% for image in images %}
+        {% if image.type == 'logo' %}
+            <img src="{{ image.url }}" alt="Company Logo">
+        {% endif %}
+    {% endfor %}        </div>
+        <div class="header-text">
+            <h1>{{ company.name }}</h1>
+            <p>RAPOR NO: <span class="text-red-600 font-bold">{{ report.id }}</span></p>
+            <p>TARİH: <span><strong>{{ report.finished_at }}</strong></span> SAAT: <span><strong>{{ report.finished_at }}</strong></span></p>
+        </div>
+    </div>
+</header>

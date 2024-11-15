@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tüm Randevular</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body class="bg-gray-100">
+{% include 'navbar.html' %}
+<!-- create appointment  -->
+<div id="createAppointmentModal"></div>
+<!-- update appointment modal -->
+<div id="updateModal" class="modal hidden fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex justify-center items-center">
+</div>
+<div class="container mx-auto mt-8">
+    <h2 class="text-lg font-bold text-gray-700">Tüm Randevular</h2>
+
+
+    <div class="bg-white p-4 rounded-lg shadow mt-4">
+        {% if appointments %}
+        <table class="min-w-full bg-white">
+            <thead>
+
+            <tr>
+
+                <th class="py-2 px-4 border-b text-left text-gray-600">Randevu Tarihi ve Saati</th>
+                <th class="py-2 px-4 border-b text-left text-gray-600">Müşteri Adı ve Soyadı</th>
+                <th class="py-2 px-4 border-b text-left text-gray-600">Telefon Numarası</th>
+                <th class="py-2 px-4 border-b text-left text-gray-600">Araç Modeli</th>
+                <th class="py-2 px-4 border-b text-left text-gray-600">Randevu Durumu</th>
+                <th class="py-2 px-4 border-b text-left text-gray-600">İşlem</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for appointment in appointments %}
+            <tr>
+                <td class="py-2 px-4 border-b">{{ appointment.date }} {{ appointment.time.strftime('%H:%M') }}</td>
+                <td class="py-2 px-4 border-b">{{ appointment.customer.full_name }}</td>
+                <td class="py-2 px-4 border-b">{{ appointment.customer.phone_number }}</td>
+                <td class="py-2 px-4 border-b">{{ appointment.brand }} {{ appointment.model }}</td>
+                <td class="py-2 px-4 border-b">
+                    {% if appointment.reminder_sent %}
+                    Gönderildi
+                    {% else %}
+                    Gönderilmedi
+                    {% endif %}
+                </td>
+
+                <td class="py-2 px-4 border-b">
+                    <button onclick="openUpdateModal({{ appointment.id }})" class="bg-blue-500 text-white px-2 py-1 rounded">Güncelle</button>
+                </td>
+
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+
+        <!-- Pagination Controls -->
+        <div class="flex justify-center items-center mt-4">
+            {% if pagination.has_prev %}
+            <a href="{{ url_for('appointments.appointment_list', page=pagination.prev_num) }}"
+               class="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">Önceki</a>
+            {% endif %}
+
+            <span class="text-gray-700 mx-2">Sayfa {{ pagination.page }} / {{ pagination.pages }}</span>
+
+            {% if pagination.has_next %}
+            <a href="{{ url_for('appointments.appointment_list', page=pagination.next_num) }}"
+               class="bg-gray-300 text-gray-700 px-4 py-2 rounded ml-2">Sonraki</a>
+            {% endif %}
+        </div>
+
+        {% else %}
+        <p class="text-center py-4 text-gray-500">Hiç randevu bulunmamaktadır.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script src="../../static/js/appointment.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,406 @@
+<style>
+
+    .frentable {
+        width: 100%;
+        height: 500px;
+        border-collapse: collapse;
+    }
+
+    .frentd {
+        border: 2px solid black;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+
+    .extra {
+        width: 25%;
+    }
+    .rotate-text {
+        display: inline-block;
+        transform: rotate(-90deg);
+        white-space: nowrap;
+        text-align: center;
+        width:5px;
+        margin-top:130px;
+    }
+
+    .on-frenler, .arka-frenler {
+        height: 50%;
+        width: 2%;
+        font-size:17px;
+        background-color: #d9d9d9;
+    }
+    .elFrenTitle{
+        width:2%;
+        font-size:17px;
+        background-color: #d9d9d9;
+    }
+
+    .aracgovde {
+        position: relative;
+    }
+
+    .bg img {
+        width: 60%;
+        height: auto;
+        padding-left: 20%;
+        padding-right: 20%;
+    }
+
+    .yon {
+        position: absolute;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .yon.top {
+        top: -35px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .yon.right {
+        right: 100px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .yon.bottom {
+        bottom: 35px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .yon.left {
+        left: 100px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .olcum {
+        position: absolute;
+        font-size: 16px;
+        text-align: center;
+        color: #000;
+    }
+
+    .olcum.solOn {
+        top: 10%;
+        left: 4%;
+    }
+
+    .olcum.sagOn {
+        top: 10%;
+        right: 6%;
+    }
+
+    .olcum.solArka {
+        bottom: 20%;
+        left: 4%;
+    }
+
+    .olcum.sagArka {
+        bottom: 20%;
+        right: 6%;
+    }
+    .el-freni.olcum.solArka {
+        bottom: 50%;
+        left: 4%;
+    }
+    .el-freni.olcum.sagArka {
+        bottom: 50%;
+        right: 6%;
+    }
+
+    .sapmaOn, .sapmaArka, .sonucOn, .sonucArka {
+        position: absolute;
+        font-size: 13px;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 10px;
+    }
+
+    .sapmaOn {
+        top: 10%;
+        left: 50%;
+        background-color: white;
+        transform: translateX(-50%);
+    }
+
+    .sonucOn {
+        top: 25%;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #fff;
+    }
+    .sonucOn.green, .sonucArka.green{
+        background-color:#26c31e;
+    }
+    .sonucOn.red, .sonucArka.red{
+        background-color:red;
+    }
+
+    .sapmaArka {
+        bottom: 20%;
+        left: 50%;
+        background-color: white;
+        transform: translateX(-50%);
+    }
+    .sapmaArkaElFren {
+        position: absolute;
+        top: 40%;
+        left: 27%;
+        background-color: white;
+        font-size: 13px;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 10px;
+
+    }
+    .sonucArka {
+        bottom: 40%;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #fff;
+    }
+    .sonucArka.elFren{
+        left:45%;
+    }
+
+    .text {
+        font-size: 14px;
+        color:black;
+    }
+
+
+    .durum {
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .durum .green {
+        color: #26c31e;
+        font-weight: bold;
+    }
+
+    .durum .red {
+        color: red;
+        font-weight: bold;
+    }
+
+
+
+    .circle {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background-color: currentColor;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+    .fren-span {
+        font-size: 13px;
+        font-weight: bold;
+        background-color: white;
+        border: 2px solid black;
+        color: black;
+        border-radius: 13px;
+        width: 50px;
+        height: 20px;
+        display: inline-block;
+        text-align: center;
+        line-height: 20px;
+    }
+    .cropped-image {
+        height: 30%;
+        overflow: hidden;
+        position: relative;
+        top: 35%;
+    }
+
+    .cropped-image img {
+        height: auto;
+        transform: translateY(-70%);
+    }
+</style>
+
+{% macro get_feature_value(features, name) %}
+{% for feature in features %}
+{% if feature.name == name %}
+{{ feature.status }}
+{% endif %}
+{% endfor %}
+{% endmacro %}
+
+<div class="title-large primary-color primary-bg-color" style="position: relative; padding: 15px;">
+    <span style="color: white;">FREN EKSPERTİZ RAPORU</span>
+    <div class="sasi-wrapper" style="position: absolute; right: 1%; top: 50%; transform: translateY(-50%); padding: 0 10px; background-color: white; border-left: 0;">
+        <table width="100%">
+            <tbody>
+            <tr>
+                <td class="" style="font-size: 12px; font-weight: bold; ">
+                    ŞASİ NO<span style="font-size: 14px; ">:</span>
+                </td>
+                <td class=" text-medium" rowspan="2" style="font-size: 20px; font-weight: bold;">
+                    {{ vehicle.chassis_number[-6:] }}
+                </td>
+            </tr>
+            <tr>
+                <td class=" text-small" style="font-size: 8px; text-align:center;  ">
+                    SON 6 HANE
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<table class="frentable">
+    <tr>
+        <td class="on-frenler   frentd hTitle "><span class="rotate-text">ÖN FRENLER</span></td>
+        <td class="extra frentd" rowspan="2" width="350" valign="top">
+            <div class="aracgovde fren">
+                <div class="bg">
+                    <img src="{{ fren_image_url }}" alt="Frenler">
+                    <span class="yon top">ÖN</span>
+                    <span class="yon right">SAĞ</span>
+                    <span class="yon bottom">ARKA</span>
+                    <span class="yon left">SOL</span>
+                    {% set on_sol_fren = get_feature_value(pckg_report.features, 'ÖN SOL FREN')|float %}
+                    {% set on_sag_fren = get_feature_value(pckg_report.features, 'ÖN SAĞ FREN')|float %}
+                    <!-- ÖN SOL FREN -->
+                    <span class="olcum solOn">
+                        <span class="deger">
+                            <span id="olcumSolOn" class="fren-span">{{ on_sol_fren|int }}</span>
+                        </span>
+                    </span>
+
+
+
+                    <!-- Sapma Hesaplaması ve Sonuç -->
+                    {% if on_sol_fren > 0 %}
+                        {% set sapma_on = ((on_sol_fren - on_sag_fren)|abs / on_sol_fren * 100)|round(2) %}
+                    {% else %}
+                        {% set sapma_on = 0 %}
+                    {% endif %}
+
+                    <span class="sapmaOn fren" style="display: inline;">
+                            SAPMA <span class="sapmaOnDeger fren green">{{ sapma_on }}%</span>
+                        </span>
+                    <span class="sonucOn fren {{ 'green' if sapma_on <= 30 else 'red' }}" style="display: inline;">
+                            {{ 'GEÇTİ' if sapma_on <= 30 else 'KALDI' }}
+                        </span>
+
+                    <!-- ÖN SAĞ FREN -->
+                    <span class="olcum sagOn">
+                            <span class="deger">
+                            <span id="olcumSagOn" class="fren-span">{{ on_sag_fren|int }}</span>
+                            </span>
+                    </span>
+
+
+
+                    <!-- Sapma Hesaplaması ve Sonuç -->
+                    {% set arka_sol_fren = get_feature_value(pckg_report.features, 'ARKA SOL FREN')|float %}
+                    {% set arka_sag_fren = get_feature_value(pckg_report.features, 'ARKA SAĞ FREN')|float %}
+                    <!-- ARKA SOL FREN -->
+                    <span class="olcum solArka">
+                            <span class="deger">
+                               <span id="olcumSolArka" class="fren-span">{{ arka_sol_fren|int }}</span>
+                            </span>
+                    </span>
+
+
+
+                    {% if arka_sol_fren > 0 %}
+                        {% set sapma_arka = ((arka_sol_fren - arka_sag_fren)|abs / arka_sol_fren * 100)|round(2) %}
+                    {% else %}
+                        {% set sapma_arka = 0 %}
+                    {% endif %}
+
+                    <span class="sapmaArka fren" style="display: inline;">
+                            SAPMA <span class="sapmaArkaDeger fren green">{{ sapma_arka }}%</span>
+                        </span>
+                    <span class="sonucArka fren {{ 'green' if sapma_arka <= 30 else 'red' }}" style="display: inline;">
+                            {{ 'GEÇTİ' if sapma_arka <= 30 else 'KALDI' }}
+                        </span>
+
+                    <!-- ARKA SAĞ FREN -->
+                    <span class="olcum sagArka">
+                            <span class="deger">
+                               <span id="olcumSagArka" class="fren-span">{{ arka_sag_fren|int }}</span>
+                            </span>
+                        </span>
+                </div>
+                <div class="durum">
+                    <div class="green">
+                        <span class="circle"></span> Sapma %0‘dan %30‘a kadar Geçer
+                    </div>
+                    <div class="red">
+                        <span class="circle"></span> Sapma %31‘den %100‘e kadar Kalır
+                    </div>
+                </div>
+            </div>
+        </td>
+        <td class="elFrenTitle hTitle frentd" rowspan="2"> <span class="rotate-text">EL FRENİ</span></td>
+        <td rowspan="2" class="extra frentd" >
+            <div class="aracgovde el-freni">
+                <div class="bg">
+                    <div class="cropped-image">
+                        <img src="{{ fren_image_url }}" alt="El Freni">
+                    </div>
+
+                    <!-- Sapma Hesaplaması ve Sonuç -->
+                    {% set el_fren_sol = get_feature_value(pckg_report.features, 'EL FRENI SOL')|float %}
+                    {% set el_fren_sag = get_feature_value(pckg_report.features, 'EL FRENI SAĞ')|float %}
+                    <!-- EL FRENI SOL -->
+                    <span class="olcum solArka el-freni">
+                            <span class="deger">
+                               <span id="olcumElSolArka" class="fren-span">{{ el_fren_sol|int }}</span>
+                            </span>
+                        </span>
+
+
+
+                    {% if el_fren_sol > 0 %}
+                    {% set sapma_el_fren = ((el_fren_sol - el_fren_sag)|abs / el_fren_sol * 100)|round(2) %}
+                    {% else %}
+                    {% set sapma_el_fren = 0 %}
+                    {% endif %}
+
+                    <span class="sapmaArkaElFren" style="display: inline;">
+                            SAPMA <span class="sapmaArkaDeger elFren green">{{ sapma_el_fren }}%</span>
+                        </span>
+                    <span class="sonucArka elFren {{ 'green' if sapma_el_fren <= 30 else 'red' }}" style="display: inline;">
+                            {{ 'GEÇTİ' if sapma_el_fren <= 30 else 'KALDI' }}
+                        </span>
+
+                    <!-- EL FRENI SAĞ -->
+                    <span class="olcum sagArka el-freni">
+                            <span class="deger">
+                               <span id="olcumElSagArka" class="fren-span">{{ el_fren_sag|int }}</span>
+                            </span>
+                    </span>
+                </div>
+                <div class="durum">
+                    <div class="green">
+                        <span class="circle"></span> Sapma %0‘dan %30‘a kadar Geçer
+                    </div>
+                    <div class="red">
+                        <span class="circle"></span> Sapma %31‘den %100‘e kadar Kalır
+                    </div>
+                </div>
+            </div>
+        </td>
+
+    </tr>
+    <tr>
+        <td class="arka-frenler frentd hTitle "><span class="rotate-text">ARKA FRENLER</span></td>
+    </tr>
+</table>
+

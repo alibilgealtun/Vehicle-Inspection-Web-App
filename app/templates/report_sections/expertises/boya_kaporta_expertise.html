@@ -1,0 +1,371 @@
+<style>
+    /* Custom radio button styling */
+    input[type="radio"] {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 24px;
+        height: 24px;
+        border: 2px solid #4A5568; /* Border color */
+        border-radius: 50%;
+        outline: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    input[type="radio"]:checked {
+        border-color: #38B2AC; /* Border color when checked */
+        background-color: #38B2AC; /* Background color when checked */
+    }
+
+    input[type="radio"]:checked::before {
+        content: '';
+        display: block;
+        width: 12px;
+        height: 12px;
+        margin: 4px;
+        background-color: #38B2AC; /* Inner circle color when checked */
+        border-radius: 50%;
+    }
+
+    input[type="radio"]:hover {
+        border-color: #68D391; /* Border color on hover */
+    }
+    table{
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td{
+        padding:12px;
+        border-bottom: 1px solid #E2E8f0;
+    }
+    .car-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin:0;
+    }
+
+    .car-td {
+        padding:0;
+        margin:0;
+    }
+
+    th {
+        text-align: left;
+        background-color: #F7FAFC;
+        color: #2D3748;
+        font-weight: 600;
+    }
+
+    td {
+        text-align: center;
+        color: #4A5568;
+    }
+
+     .form-section {
+         display: flex;
+         flex-wrap: wrap;
+         gap: 20px;
+         justify-content: space-between;
+     }
+
+    .form-column {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .form-column label {
+        display: block;
+        margin-bottom: 8px;
+        color: #2D3748;
+        font-weight: 600;
+    }
+
+    .form-column select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #E2E8F0;
+        border-radius: 6px;
+        background-color: #F7FAFC;
+        color: #2D3748;
+        font-weight: 600;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+    }
+
+    .form-column select:hover {
+        background-color: #EDF2F7;
+    }
+
+    .form-column select[disabled] {
+        background-color: #EDF2F7;
+        color: #A0AEC0;
+    }
+
+    .form-column .mb-4 {
+        margin-bottom: 16px;
+    }
+
+    /* Custom option colors based on value */
+    .form-column select option[value="ORİJİNAL"] {
+        color: #48BB78;
+        font-weight: bold;
+    }
+
+    .form-column select option[value="PLASTİK"],
+    .form-column select option[value="LOKAL BOYALI"],
+    .form-column select option[value="KAPLAMA"],
+    .form-column select option[value="SÖKÜLMÜŞ / TAKILMIŞ"] {
+        color: #3182CE;
+        font-weight: bold;
+    }
+
+    .form-column select option[value="BOYALI"],
+    .form-column select option[value="DEĞİŞMİŞ"] {
+        color: #E53E3E;
+        font-weight: bold;
+    }
+
+    .form-column select option[value="BOYASIZ GÖÇÜK"] {
+        color: #38B2AC;
+        font-weight: bold;
+    }
+
+    .form-column select option[value="EZİK-ÇİZİK"],
+    .form-column select option[value="VERNİK"] {
+        color: #805AD5;
+        font-weight: bold;
+    }
+
+    .form-column select option[value="YOK"] {
+        color: #718096;
+        font-weight: bold;
+    }
+
+    /* Image section for the car diagram */
+    .image-section {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .image-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+{% include 'report_sections/expertises/vehicle_header.html' %}
+
+<h2 class="text-lg font-semibold mb-4">Ekspertiz</h2>
+<p>Lütfen araçta kontrol ettiğiniz bölgelerin durumunu belirtin!</p>
+
+<form id="expertiseForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="expertise_report2_id" value="{{ expertise_report2.id if expertise_report2 else '' }}">
+
+    <!-- Boya Ekspertizi -->
+           {% if expertise_report %}
+            <h3 class="text-md font-semibold mb-4">{{ expertise_report.expertise_type.name }}</h3>
+            <div class="form-section">
+                <div class="form-column">
+                    {% for feature in expertise_report.features %}
+                    <div class="mb-4">
+                        <label for="feature_{{ feature.id }}" class="block text-gray-700 font-semibold mb-2">{{ feature.name }}</label>
+                        <select id="select_{{ feature.id }}" name="feature_{{ feature.id }}" class="dropdown" onchange="updateImage({{ feature.id }}, this.value)">
+                            <optgroup label="Durum">
+                                <option value="ORİJİNAL" {% if feature.status == 'ORİJİNAL' %}selected{% endif %}>ORİJİNAL</option>
+                                <option value="PLASTİK" {% if feature.status == 'PLASTİK' %}selected{% endif %}>PLASTİK</option>
+                                <option value="BOYALI" {% if feature.status == 'BOYALI' %}selected{% endif %}>BOYALI</option>
+                                <option value="LOKAL BOYALI" {% if feature.status == 'LOKAL BOYALI' %}selected{% endif %}>LOKAL BOYALI</option>
+                                <option value="DEĞİŞMİŞ" {% if feature.status == 'DEĞİŞMİŞ' %}selected{% endif %}>DEĞİŞMİŞ</option>
+                                <option value="KAPLAMA" {% if feature.status == 'KAPLAMA' %}selected{% endif %}>KAPLAMA</option>
+                                <option value="YOK" {% if feature.status == 'YOK' %}selected{% endif %}>YOK</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Image Section -->
+                <div class="form-column image-section">
+                    <div class="image-container w-full max-w-4xl mx-auto">
+                        <table class="car-table min-w-full border border-black">
+                            <tr>
+                                <td colspan="3" class="car-td text-center">
+                                    <img id="image_32" src="../../../static/assets/car_parts/orijinal/ön%20tampon.png" alt="ön%20tampon.png" class="mx-auto">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="car-td text-center ">
+                                    <img id="image_33" src="../../../static/assets/car_parts/orijinal/sol%20ön%20çamurluk.png" alt="sol%20ön%20çamurluk.png" class="mx-auto">
+                                </td>
+                                <td class="car-td text-center ">
+                                    <img id="image_34" src="../../../static/assets/car_parts/orijinal/kaput.png" alt="ön%20tampon.png" class="mx-auto">
+                                </td>
+                                <td class="car-td text-center">
+                                    <img id="image_35" src="../../../static/assets/car_parts/orijinal/sağ%20ön%20çamurluk.png" alt="sağ%20ön%20çamurluk.png" class="mx-auto">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="car-td text-center">
+                                    <img id="image_36" src="../../../static/assets/car_parts/orijinal/sol%20ön%20kapı.png" alt="sol%20ön%20kapı.png" class="mx-auto">
+                                </td>
+                                <td class="car-td text-center" rowspan="2">
+                                    <img id="image_37" src="../../../static/assets/car_parts/orijinal/tavan.png" alt="tavan.png" class="mx-auto">
+                                </td>
+                                <td class=" car-td text-center ">
+                                    <img id="image_38" src="../../../static/assets/car_parts/orijinal/sağ%20ön%20kapı.png" alt="sağ%20ön%20kapı.png" class="mx-auto">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="car-td text-center ">
+                                    <img id="image_39" src="../../../static/assets/car_parts/orijinal/sol%20arka%20kapı.png" alt="sol%20arka%20kapı.png" class="mx-auto">
+                                </td>
+
+                                <td class="car-td text-center">
+                                    <img id="image_40" src="../../../static/assets/car_parts/orijinal/sağ%20arka%20kapı.png" alt="sağ%20arka%20kapı.png" class="mx-auto">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="car-td text-center">
+                                    <img id="image_41" src="../../../static/assets/car_parts/orijinal/sol%20arka%20çamurluk.png" alt="sol%20arka%20tampon.png" class="mx-auto">
+                                </td>
+                                <td class="car-td text-center">
+                                    <img id="image_42" src="../../../static/assets/car_parts/orijinal/bagaj%20kapağı.png" alt="bagaj.png" class="mx-auto">
+                                </td>
+                                <td class="car-td text-center ">
+                                    <img id="image_43" src="../../../static/assets/car_parts/orijinal/sağ%20arka%20çamurluk.png" alt="sağ%20arka%20çamurluk.png" class="mx-auto">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="car-td text-center">
+                                    <img id="image_44" src="../../../static/assets/car_parts/orijinal/arka%20tampon.png" alt="arka%20tampon.png" class="mx-auto">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+ <!-- Kaporta Ekspertizi -->
+    {% if expertise_report2 %}
+    <h3 class="text-md font-semibold mb-4">{{ expertise_report2.expertise_type.name }}</h3>
+    <table class="min-w-full bg-white shadow-md rounded-lg mb-4">
+        <thead>
+        <tr>
+            <th class="text-left">KONTROL EDİLEN</th>
+            <th>SORUNSUZ</th>
+            <th>ÇİZİK</th>
+            <th>EZİK / KIRIK / GÖÇÜK</th>
+            <th>İŞLEMLİ / BOYALI</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for feature in expertise_report2.features %}
+        <tr>
+            <td class="text-left">{{ feature.name }}</td>
+            <td>
+                <input type="radio" name="feature_{{ feature.id }}" value="SORUNSUZ" {% if feature.status == 'SORUNSUZ' %}checked{% endif %}>
+            </td>
+            <td>
+                <input type="radio" name="feature_{{ feature.id }}" value="ÇİZİK" {% if feature.status == 'ÇİZİK' %}checked{% endif %}>
+            </td>
+            <td>
+                <input type="radio" name="feature_{{ feature.id }}" value="EZİK / KIRIK / GÖÇÜK" {% if feature.status == 'EZİK / KIRIK / GÖÇÜK' %}checked{% endif %}>
+            </td>
+            <td>
+                <input type="radio" name="feature_{{ feature.id }}" value="İŞLEMLİ / BOYALI" {% if feature.status == 'İŞLEMLİ / BOYALI' %}checked{% endif %}>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    <!-- Technician Comment Section for Boya Ekspertizi -->
+    <div class="mb-4">
+        <label for="technician_comment" class="block text-gray-700 font-semibold mb-2"> Teknisyen Yorumu</label>
+        <textarea id="technician_comment" name="technician_comment" rows="4" class="w-full p-2 border border-gray-300 rounded" placeholder="Teknisyenin yorumunu buraya yazın...">{{ expertise_report.comment if expertise_report else '' }}</textarea>
+    </div>
+
+    <div class="flex justify-end mt-4">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Güncelle</button>
+    </div>
+        </form>
+    </div>
+
+    <script>
+        function updateImage(featureId, status) {
+    // Debug: Log featureId and status
+    console.log("Feature ID:", featureId);
+    console.log("Selected Status:", status);
+
+    // Define the base directory for each status
+    const baseDirectory = {
+        'ORİJİNAL': 'orijinal',
+        'PLASTİK': 'plastik',
+        'BOYALI': 'boyalı',
+        'LOKAL BOYALI': 'lokal_boyalı',
+        'DEĞİŞMİŞ': 'değişmiş',
+        'KAPLAMA': 'kaplama',
+        'YOK': 'yok'
+    };
+
+    // Select the image element by its ID
+    const imageElement = document.getElementById(`image_${featureId}`);
+
+    // Debug: Log image element
+    console.log("Image Element:", imageElement);
+
+    // Check if the image element exists
+    if (imageElement) {
+        // Get the image's current file name from the alt attribute
+        const currentFilename = imageElement.alt;
+
+        // Debug: Log current filename
+        console.log("Current Filename (alt):", currentFilename);
+
+        // Update the image source, preserving %20 for spaces
+        imageElement.src = `../../../static/assets/${baseDirectory[status]}/${currentFilename}`;
+
+        // Debug: Log updated image source
+        console.log("Updated Image Source:", imageElement.src);
+    } else {
+        console.error(`Image element with id 'image_${featureId}' not found.`);
+    }
+}
+
+
+
+
+         $(document).ready(function() {
+        $('#expertiseForm').on('submit', function(event) {
+            event.preventDefault();  // Formun geleneksel yöntemle gönderilmesini engelle
+
+            // expertise_report2_id'yi kontrol et ve ayarla
+            let expertiseReport2Id = $('input[name="expertise_report2_id"]').val();
+            if (!expertiseReport2Id) {
+                expertiseReport2Id = "{{ expertise_report2.id if expertise_report2 else '' }}";
+                $('input[name="expertise_report2_id"]').val(expertiseReport2Id);
+            }
+
+            $.ajax({
+                url: "{{ url_for('reports.expertise_detail', expertise_report_id=expertise_report.id) }}",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(response) {
+                    alert("Ekspertiz durumu başarıyla güncellendi!");
+                },
+                error: function(error) {
+                    console.log("Error:", error);
+                    alert("Rapor güncellenemedi. Bir sorun olmadığına emin olun!");
+                }
+            });
+        });
+    });
+    </script>

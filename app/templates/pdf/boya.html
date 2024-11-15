@@ -1,0 +1,276 @@
+<style>
+     .car-table {
+        width: 100%;
+        height: 300px; /* Adjust this to reduce overall table size */
+        border-collapse: collapse;
+         table-layout: fixed; /* Ensure all columns have fixed width */
+    }
+
+
+    .car-td {
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        width: 33.33%; /* Fixed width for the table cells */
+        height: 100px; /* Adjust this to reduce cell size while keeping proportion */
+        border: 0;
+    }
+
+    .car-td img {
+        padding: 0;
+        margin: 0;
+        width: 100%; /* Scale image width to fit the cell */
+        height: auto; /* Maintain the aspect ratio by auto-adjusting height */
+        max-height: 100px; /* Optional: Cap the height to avoid overly large images */
+        border-radius: 8px;
+    }
+
+    .image-section {
+        margin-top:150px;
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        height: 300px;
+    }
+
+    .image-container {
+        width: 60%;
+        height: 100%;
+        margin:0;
+        padding:0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .boya-table{
+        width:80%;
+        margin-top:150px;
+    }
+    .boya-table th{
+        width:50%;
+    }
+    .info-table{
+        width:35%;
+        height:200px;
+        margin-left:460px;
+        margin-top:-350px;
+    }
+    .info-table img{
+        height:200px;
+    }
+    .info-section{
+        margin-bottom:250px;
+    }
+    .boya-comment{
+        margin-left:460px;
+        width:50%;
+        margin-bottom:0;
+    }
+
+</style>
+
+<div class="title-large primary-color primary-bg-color" style="position: relative; padding: 15px;">
+    <span style="color: white;">BOYA & KAPORTA EKSPERTİZ</span>
+    <div class="sasi-wrapper" style="position: absolute; right: 1%; top: 50%; transform: translateY(-50%); padding: 0 10px; background-color: white; border-left: 0;">
+        <table width="100%">
+            <tbody>
+            <tr>
+                <td class="" style="font-size: 12px; font-weight: bold; ">
+                    ŞASİ NO<span style="font-size: 14px; ">:</span>
+                </td>
+                <td class=" text-medium" rowspan="2" style="font-size: 20px; font-weight: bold;">
+                    {{ vehicle.chassis_number[-6:] }}
+                </td>
+            </tr>
+            <tr>
+                <td class=" text-small" style="font-size: 8px; text-align:center;  ">
+                    SON 6 HANE
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% set boya_features = pckg_report.boya_features %}
+{% set kaporta_features = pckg_report.kaporta_features%}
+
+
+<div class="form-column image-section">
+    <div class="image-container w-full max-w-4xl mx-auto">
+        <table class="car-table min-w-full">
+            <!-- Row 1: One image spanning three columns -->
+            <tr>
+                <td></td>
+                <td class="car-td" >
+                    <img id="image_1" src="{{ boya_features[3].image_path }}" alt="{{ boya_features[0].name }}">
+                </td>
+                <td></td>
+            </tr>
+
+            <!-- Row 2: Left and right images, center image spanning two rows -->
+            <tr>
+                <td class="car-td">
+                    <img id="image_2" src="{{ boya_features[0].image_path }}" alt="{{ boya_features[1].name }}">
+                </td>
+                <td class="car-td" >
+                    <img id="image_3" src="{{ boya_features[4].image_path }}" alt="{{ boya_features[2].name }}">
+                </td>
+                <td class="car-td">
+                    <img id="image_4" src="{{ boya_features[8].image_path }}" alt="{{ boya_features[8].name }}">
+                </td>
+            </tr>
+
+            <!-- Row 3: Fills the space below the rowspan -->
+            <tr>
+                <td class="car-td">
+                    <img id="image_5" src="{{ boya_features[1].image_path }}" alt="{{ boya_features[4].name }}">
+                </td>
+                    <td class="car-td" rowspan="2" style="height:auto;">
+                    <img id="image_14" src="{{ boya_features[5].image_path }}" alt="{{ boya_features[5].name }}">
+                </td>
+                <td class="car-td">
+                    <img id="image_6" src="{{ boya_features[9].image_path }}" alt="{{ boya_features[9].name }}">
+                </td>
+            </tr>
+
+            <!-- Row 4: Similar to Row 2, but with different images -->
+            <tr>
+                <td class="car-td">
+                    <img id="image_7" src="{{ boya_features[12].image_path }}" alt="{{ boya_features[10].name }}">
+                </td>
+
+                <td class="car-td">
+                    <img id="image_9" src="{{ boya_features[10].image_path }}" alt="{{ boya_features[10].name }}">
+                </td>
+            </tr>
+
+            <!-- Row 5: Fills the space below the rowspan -->
+            <tr>
+
+                <td class="car-td">
+                    <img id="image_23" src="{{ boya_features[2].image_path }}" alt="{{ boya_features[9].name }}">
+                </td>
+                <td class="car-td">
+                    <img id="image_11" src="{{ boya_features[6].image_path }}" alt="{{ boya_features[6].name }}">
+                </td>
+                <td class="car-td">
+                    <img id="image_12" src="{{ boya_features[11].image_path }}" alt="{{ boya_features[11].name }}">
+                </td>
+            </tr>
+            <!-- Row 6 -->
+            <tr>
+                <td></td>
+                <td class="car-td">
+                    <img id="image_12" src="{{ boya_features[7].image_path }}" alt="{{ boya_features[7].name }}">
+</td>
+                <td></td>
+            </tr>
+
+
+        </table>
+    </div>
+
+</div>
+<div class="info-section">
+    <div class="info-table">
+         <img src="{{ info_image_url }}" alt="info">
+    </div>
+    <div class="boya-comment">
+         <div class="footer-expertise">
+            <div class="section-title">
+                KAPORTA - BOYA EKSPERTİZ ÖZETİ
+            </div>
+            {% if boya_comment|length > 230 %}
+            <div class="summary-text summary-text-small">
+                {{ boya_comment }}
+            </div>
+            {% else %}
+            <div class="summary-text summary-text-normal">
+                {{ boya_comment }}
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+<!-- KAPORTA TABLE -->
+<div class="table-container boya-table" style="display: flex; justify-content: space-between; margin-bottom:5px;">
+    <table class="inspection-table" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <!-- First Column -->
+            <td style="vertical-align: top; width: 33.33%;">
+                <table class="inspection-table-inner" style="width: 100%; border-collapse: collapse;">
+                    {% for feature in kaporta_features[:kaporta_features|length // 3] %}
+                    <tr>
+                        <th style="text-align: left; padding: 8px;">{{ feature.name }}</th>
+                        <td>
+                            {% if feature.status == 'YOK' %}
+                            <div class="status-container">
+                                <span class="status-box status-black filled">YOK</span>
+                            </div>
+                            {% else %}
+                            <div class="status-container">
+                                <span class="status-box status-good {% if feature.status == 'Kontrolden Geçti' %}filled{% endif %}"></span>
+                                <span class="status-box status-warning {% if feature.status == 'Sorun Çıkarabilir' %}filled{% endif %}"></span>
+                                <span class="status-box status-red {% if feature.status == 'Bakım Gerekli' %}filled{% endif %}"></span>
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </td>
+
+            <!-- Second Column -->
+            <td style="vertical-align: top; width: 33.33%;">
+                <table class="inspection-table-inner" style="width: 100%; border-collapse: collapse;">
+                    {% for feature in kaporta_features[kaporta_features|length // 3: kaporta_features|length // 3 * 2] %}
+                    <tr>
+                        <th style="text-align: left; padding: 8px;">{{ feature.name }}</th>
+                        <td>
+                            {% if feature.status == 'YOK' %}
+                            <div class="status-container">
+                                <span class="status-box status-black filled">YOK</span>
+                            </div>
+                            {% else %}
+                            <div class="status-container">
+                                <span class="status-box status-good {% if feature.status == 'ÇİZİK' %}filled{% endif %}"></span>
+                                <span class="status-box status-warning {% if feature.status == 'EZİK / KIRIK / GÖÇÜK' %}filled{% endif %}"></span>
+                                <span class="status-box status-red {% if feature.status == 'İŞLEMLİ / BOYALI' %}filled{% endif %}"></span>
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </td>
+
+            <!-- Third Column -->
+            <td style="vertical-align: top; width: 33.33%;">
+                <table class="inspection-table-inner" style="width: 100%; border-collapse: collapse;">
+                    {% for feature in kaporta_features[kaporta_features|length // 3 * 2:] %}
+                    <tr>
+                        <th style="text-align: left; padding: 8px;">{{ feature.name }}</th>
+                        <td>
+                            {% if feature.status == 'YOK' %}
+                            <div class="status-container">
+                                <span class="status-box status-black filled">YOK</span>
+                            </div>
+                            {% else %}
+                            <div class="status-container">
+                                <span class="status-box status-good {% if feature.status == 'ÇİZİK' %}filled{% endif %}"></span>
+                                <span class="status-box status-warning {% if feature.status == 'EZİK / KIRIK / GÖÇÜK' %}filled{% endif %}"></span>
+                                <span class="status-box status-red {% if feature.status == 'İŞLEMLİ / BOYALI' %}filled{% endif %}"></span>
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>

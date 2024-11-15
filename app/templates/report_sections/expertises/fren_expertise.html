@@ -1,0 +1,209 @@
+<style>
+    /* Styling for the form and inputs */
+    input[type="number"] {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #CBD5E0;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+        color: #4A5568;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    input[type="number"]:focus {
+        border-color: #38B2AC;
+        box-shadow: 0 0 0 3px rgba(56, 178, 172, 0.5);
+    }
+
+    input[type="number"][readonly] {
+        background-color: #E2E8F0; /* Gray background when readonly */
+        color: #A0AEC0; /* Optional: Change text color to light gray */
+    }
+
+    button[type="submit"] {
+        background-color: #3182CE;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 0.375rem;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #2B6CB0;
+    }
+
+    /* Additional styles for checkboxes */
+    input[type="checkbox"] {
+        margin-right: 0.5rem;
+    }
+
+    .test-section {
+        margin-bottom: 2rem;
+    }
+
+    .test-section label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-section {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-section label {
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+{% include 'report_sections/expertises/vehicle_header.html' %}
+
+<!-- templates/expertises/fren_testi.html -->
+<h2 class="text-lg font-semibold mb-4">Fren Testi</h2>
+<p>Lütfen araçta kontrol ettiğiniz bölgelerin durumunu belirtin!</p>
+
+<form id="frenTestiForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="grid grid-cols-3 gap-6">
+        <!-- Ön Frenler Section -->
+        <div class="test-section">
+            <label>Ön Frenler</label>
+
+            <input type="checkbox" id="on_fren_olcum_yapilamadi" name="on_fren_olcum_yapilamadi" >
+            <label for="on_fren_olcum_yapilamadi">Ölçüm yapılamadı.</label>
+            <div class="form-section">
+                {% for feature in expertise_report.features %}
+                {% if feature.name == 'ÖN SOL FREN' %}
+                <label for="on_sol_fren">ÖN SOL FREN</label>
+                <input type="number" id="on_sol_fren" name="on_sol_fren" value="{{ feature.status }}">
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="form-section">
+                {% for feature in expertise_report.features %}
+                {% if feature.name == 'ÖN SAĞ FREN' %}
+                <label for="on_sag_fren">ÖN SAĞ FREN</label>
+                <input type="number" id="on_sag_fren" name="on_sag_fren" value="{{ feature.status }}">
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Arka Frenler Section -->
+        <div class="test-section">
+            <label>Arka Frenler</label>
+
+            <input type="checkbox" id="arka_fren_olcum_yapilamadi" name="arka_fren_olcum_yapilamadi">
+            <label for="arka_fren_olcum_yapilamadi">Ölçüm yapılamadı.</label>
+
+            <div class="form-section">
+                {% for feature in expertise_report.features %}
+                {% if feature.name == 'ARKA SOL FREN' %}
+                <label for="arka_sol_fren">ARKA SOL FREN</label>
+                <input type="number" id="arka_sol_fren" name="arka_sol_fren" value="{{ feature.status }}">
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="form-section">
+                {% for feature in expertise_report.features %}
+                {% if feature.name == 'ARKA SAĞ FREN' %}
+                <label for="arka_sag_fren">ARKA SAĞ FREN</label>
+                <input type="number" id="arka_sag_fren" name="arka_sag_fren" value="{{ feature.status }}">
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- El Freni Section -->
+        <div class="test-section">
+            <label>El Freni</label>
+            <input type="checkbox" id="el_freni_olcum_yapilamadi" name="el_freni_olcum_yapilamadi">
+            <label for="el_freni_olcum_yapilamadi">Ölçüm yapılamadı.</label>
+            <div class="form-section">
+                {% for feature in expertise_report.features %}
+                {% if feature.name == 'EL FRENI SOL' %}
+                <label for="el_freni_sol">EL FRENİ SOL</label>
+                <input type="number" id="el_freni_sol" name="el_freni_sol" value="{{ feature.status }}">
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="form-section">
+                {% for feature in expertise_report.features %}
+                {% if feature.name == 'EL FRENI SAĞ' %}
+                <label for="el_freni_sag">EL FRENİ SAĞ</label>
+                <input type="number" id="el_freni_sag" name="el_freni_sag" value="{{ feature.status }}">
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-end mt-4">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">KAYDET</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+        function updateInputsBasedOnCheckbox(checkboxId, inputIds) {
+            if ($(checkboxId).is(':checked')) {
+                inputIds.forEach(function(inputId) {
+                    $(inputId).val(0);
+                    $(inputId).prop('readonly', true); // Instead of disabling, use readonly
+                });
+            } else {
+                inputIds.forEach(function(inputId) {
+                    $(inputId).prop('readonly', false); // Remove readonly to allow editing
+                });
+            }
+        }
+
+        function initCheckboxHandlers() {
+            $('#on_fren_olcum_yapilamadi').on('change', function() {
+                updateInputsBasedOnCheckbox('#on_fren_olcum_yapilamadi', ['#on_sol_fren', '#on_sag_fren']);
+            });
+
+            $('#arka_fren_olcum_yapilamadi').on('change', function() {
+                updateInputsBasedOnCheckbox('#arka_fren_olcum_yapilamadi', ['#arka_sol_fren', '#arka_sag_fren']);
+            });
+
+            $('#el_freni_olcum_yapilamadi').on('change', function() {
+                updateInputsBasedOnCheckbox('#el_freni_olcum_yapilamadi', ['#el_freni_sol', '#el_freni_sag']);
+            });
+        }
+
+        function initializeForm() {
+            // Set initial states
+            updateInputsBasedOnCheckbox('#on_fren_olcum_yapilamadi', ['#on_sol_fren', '#on_sag_fren']);
+            updateInputsBasedOnCheckbox('#arka_fren_olcum_yapilamadi', ['#arka_sol_fren', '#arka_sag_fren']);
+            updateInputsBasedOnCheckbox('#el_freni_olcum_yapilamadi', ['#el_freni_sol', '#el_freni_sag']);
+
+            // Attach event handlers
+            initCheckboxHandlers();
+        }
+
+        initializeForm();
+
+        $('#frenTestiForm').on('submit', function(event) {
+            event.preventDefault();  // Prevent the form from submitting in the traditional way
+            $.ajax({
+                url: "{{ url_for('reports.expertise_detail', expertise_report_id=expertise_report.id) }}",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(response) {
+                    alert("Fren testi durumu başarıyla güncellendi!");
+                },
+                error: function(error) {
+                    console.log("Error:", error);
+                    alert("Rapor güncellenemedi. Bir sorun olmadığına emin olun!");
+                }
+            });
+        });
+    });
+</script>

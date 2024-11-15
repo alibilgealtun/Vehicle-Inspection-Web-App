@@ -1,0 +1,92 @@
+<!-- Inspection Information -->
+<div class="grid grid-cols-2 gap-6">
+    <!-- Created By Staff -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Oluşturan Personel</label>
+        <select name="created_by" id="created_by" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                oninvalid="this.setCustomValidity('Lütfen oluşturan personel seçin')"
+                oninput="setCustomValidity('')">
+            <option value="">--Seçiniz--</option>
+            {% for staff in form.created_by.choices %}
+            <option value="{{ staff[0] }}" {% if form.created_by.data == staff[0] %}selected{% endif %}>
+                {{ staff[1] }}
+            </option>
+            {% endfor %}
+        </select>
+        {% if form.created_by.errors %}
+        <span class="text-red-500 text-sm">{{ form.created_by.errors[0] }}</span>
+        {% endif %}
+    </div>
+
+
+    <!-- Inspection Date -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Ekspertiz Tarihi</label>
+        <input type="datetime-local" name="inspection_date" id="inspection_date" required
+               value="{{ form.inspection_date.data.strftime('%Y-%m-%dT%H:%M') if form.inspection_date.data else '' }}"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+               oninvalid="this.setCustomValidity('Lütfen ekspertiz tarihini girin')"
+               oninput="setCustomValidity('')">
+        {% if form.inspection_date.errors %}
+        <span class="text-red-500 text-sm">{{ form.inspection_date.errors[0] }}</span>
+        {% endif %}
+    </div>
+
+
+    <!-- Inspection Package -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Ekspertiz Paketi</label>
+        <select name="package_id" id="package_id" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                oninvalid="this.setCustomValidity('Lütfen bir ekspertiz paketi seçin')"
+                oninput="setCustomValidity('')">
+            <option value="">--Seçiniz--</option>
+            {% for package in packages %}
+            <option value="{{ package.id }}" {% if form.package_id.data == package.id %}selected{% endif %}>
+                {{ package.name }}
+            </option>
+            {% endfor %}
+        </select>
+        {% if form.package_id.errors %}
+        <span class="text-red-500 text-sm">{{ form.package_id.errors[0] }}</span>
+        {% endif %}
+    </div>
+
+
+
+    <div class="grid grid-cols-2 gap-6">
+        <!-- Package Price -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Paket Fiyatı</label>
+            <input type="text" name="package_price" id="package_price" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                   oninvalid="this.setCustomValidity('Lütfen paket fiyatını girin')"
+                   oninput="setCustomValidity(''); calculateVAT();">
+        </div>
+
+        <!-- Package Price (Including VAT) -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Paket Fiyatı (KDV Dahil)</label>
+            <input type="text" name="package_price_vat" id="package_price_vat" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                   readonly>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function calculateVAT() {
+        const packagePriceInput = document.getElementById('package_price');
+        const packagePriceVatInput = document.getElementById('package_price_vat');
+
+        let packagePrice = parseFloat(packagePriceInput.value);
+
+        if (!isNaN(packagePrice)) {
+            packagePriceVatInput.value = (packagePrice * 118 / 100).toFixed(2);
+        } else {
+            packagePriceVatInput.value = '';
+        }
+    }
+</script>

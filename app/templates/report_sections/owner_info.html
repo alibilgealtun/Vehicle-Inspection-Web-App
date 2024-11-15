@@ -1,0 +1,38 @@
+<!-- Owner Information -->
+<div>
+    <h3 class="text-lg font-semibold mb-4">Araç Sahibi Bilgileri (Ruhsat Üzerinde)</h3>
+    <div class="grid grid-cols-2 gap-6">
+        <div>
+            <label for="owner_name" class="block text-sm font-medium text-gray-700">Adı Soyadı</label>
+            <input type="text" name="owner_name" id="owner_name" value="{{ form.owner_name.data | skip_none  }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            {% if form.owner_name.errors %}
+            <span class="text-red-500 text-sm">{{ form.owner_name.errors[0] }}</span>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="owner_tax_no" class="block text-sm font-medium text-gray-700">TC / Vergi No</label>
+            <input type="text" name="owner_tax_no" id="owner_tax_no" value="{{ form.owner_tax_no.data | skip_none }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            {% if form.owner_tax_no.errors %}
+            <span class="text-red-500 text-sm">{{ form.owner_tax_no.errors[0] }}</span>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="owner_phone" class="block text-sm font-medium text-gray-700">Telefon</label>
+            <input type="text" name="owner_phone" id="owner_phone" value="{{ form.owner_phone.data | skip_none }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            {% if form.owner_phone.errors %}
+            <span class="text-red-500 text-sm">{{ form.owner_phone.errors[0] }}</span>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="owner_address" class="block text-sm font-medium text-gray-700">Owner Address</label>
+            <textarea name="owner_address" id="owner_address" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">{{ form.owner_address.data }}</textarea>
+            {% if form.owner_address.errors %}
+            <span class="text-red-500 text-sm">{{ form.owner_address.errors[0] | skip_none }}</span>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
