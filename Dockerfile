@@ -1,24 +1,31 @@
 FROM python:3.10-slim
 
-# Update and install system dependencies step-by-step
-RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common && \
-    apt-get install -y --no-install-recommends libgirepository1.0-dev || echo "libgirepository1.0-dev failed" && \
-    apt-get install -y --no-install-recommends libcairo2 || echo "libcairo2 failed" && \
-    apt-get install -y --no-install-recommends libgobject-2.0-0 || echo "libgobject-2.0-0 failed" && \
-    apt-get install -y --no-install-recommends libpango-1.0-0 || echo "libpango-1.0-0 failed" && \
-    apt-get install -y --no-install-recommends fonts-liberation || echo "fonts-liberation failed" && \
-    apt-get install -y --no-install-recommends libharfbuzz-icu0 || echo "libharfbuzz-icu0 failed" && \
-    apt-get install -y --no-install-recommends libpangoft2-1.0-0 || echo "libpangoft2-1.0-0 failed" && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    pkg-config \
+    libcairo2 \
+    libcairo2-dev \
+    libgirepository1.0-dev \
+    gir1.2-gtk-3.0 \
+    libpango-1.0-0 \
+    libpangoft2-1.0-0 \
+    fonts-liberation \
+    libharfbuzz-icu0 \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Set the working directory
 WORKDIR /app
 
+# Copy application code into the container
 COPY . .
-
-ENV SQLALCHEMY_DATABASE_URI=sqlite:///app.db
-
+# Copy .env file
+COPY /.env .env
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Expose the application port
 EXPOSE 5000
 
+# Define the command to run the application
 CMD ["python", "run.py"]
