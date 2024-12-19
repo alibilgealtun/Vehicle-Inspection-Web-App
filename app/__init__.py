@@ -1,6 +1,7 @@
 import os
 import sys
 
+from dotenv import load_dotenv
 from flask import Flask
 from .database import db, migrate
 from .models import (
@@ -28,6 +29,7 @@ from .routes.pdfs import pdfs as pdfs_bp
 
 
 def create_app(config_object=None):
+    load_dotenv()
     app = Flask(__name__, static_url_path='/static', static_folder='static')
     if config_object == 'testing':
         app.config.from_object(TestConfig)
@@ -51,7 +53,7 @@ def create_app(config_object=None):
 
 
     logging.getLogger('fontTools.subset').setLevel(logging.WARNING)
-
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI', 'sqlite:///app.db')
     db.init_app(app)
 
     migrate.init_app(app, db)
