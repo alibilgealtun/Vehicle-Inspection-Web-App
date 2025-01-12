@@ -9,3 +9,4 @@ from .agent import Agent
 from .vehicle_owner import VehicleOwner
 from .vehicle import Vehicle
 from .expertise import ExpertiseType, ExpertiseFeature, ExpertiseReport, PackageExpertise
+from .address import Address

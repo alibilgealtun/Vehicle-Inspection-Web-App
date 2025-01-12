@@ -2,30 +2,26 @@ from ..database import db
 
 
 class ExpertiseType(db.Model):
-    # ExpertiseType defines the type of expertise (e.g., Kaporta, Boya) and can be associated with multiple ExpertiseR.
     __tablename__ = 'expertise_types'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
-    parent_id = db.Column(db.Integer, db.ForeignKey('expertise_types.id'), nullable=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey('expertise_types.id'), nullable=True, index=True)
 
-    # Relationship to associate expertise type with multiple ExpertiseReports
-    expertise_reports = db.relationship('ExpertiseReport', back_populates='expertise_type')
-    children = db.relationship('ExpertiseType', backref=db.backref('parent', remote_side=[id]))
+    expertise_reports = db.relationship('ExpertiseReport', back_populates='expertise_type', lazy=True)
+    children = db.relationship('ExpertiseType', backref=db.backref('parent', remote_side=[id]), lazy=True)
 
     def __repr__(self):
-        return f'<ExpertiseType {self.name}>'
+        return f'{self.name}'
 
 
 class ExpertiseReport(db.Model):
     __tablename__ = 'expertise_reports'
     id = db.Column(db.Integer, primary_key=True)
-    expertise_type_id = db.Column(db.Integer, db.ForeignKey('expertise_types.id'), nullable=False)
+    expertise_type_id = db.Column(db.Integer, db.ForeignKey('expertise_types.id'), nullable=False, index=True)
     comment = db.Column(db.Text, nullable=True)
 
-    # Relationships
-    expertise_type = db.relationship('ExpertiseType', back_populates='expertise_reports')
-    features = db.relationship('ExpertiseFeature', back_populates='expertise_report')
-    # package_expertise = db.relationship('PackageExpertise', back_populates='expertise_reports')
+    expertise_type = db.relationship('ExpertiseType', back_populates='expertise_reports', lazy=True)
+    features = db.relationship('ExpertiseFeature', back_populates='expertise_report', cascade="all, delete-orphan", lazy=True)
 
     def __repr__(self):
         return f'<ExpertiseReport {self.expertise_type.name}>'
@@ -37,27 +33,22 @@ class ExpertiseFeature(db.Model):
     name = db.Column(db.String(100), nullable=False)
     status = db.Column(db.String(50), nullable=True)
     image_path = db.Column(db.String(255), nullable=True)
-    expertise_report_id = db.Column(db.Integer, db.ForeignKey('expertise_reports.id'), nullable=False)
+    expertise_report_id = db.Column(db.Integer, db.ForeignKey('expertise_reports.id'), nullable=False, index=True)
 
-    # Relationship back to ExpertiseReport
-    expertise_report = db.relationship('ExpertiseReport', back_populates='features')
+    expertise_report = db.relationship('ExpertiseReport', back_populates='features', lazy=True)
 
     def __repr__(self):
         return f'<ExpertiseFeature {self.name} - {self.status}>'
 
 
-
 class PackageExpertise(db.Model):
-    # Model between package & expertise types
     __tablename__ = 'package_expertises'
     id = db.Column(db.Integer, primary_key=True)
-    package_id = db.Column(db.Integer, db.ForeignKey('package.id'), nullable=False)
-    expertise_type_id = db.Column(db.Integer, db.ForeignKey('expertise_types.id'), nullable=False)
+    package_id = db.Column(db.Integer, db.ForeignKey('package.id'), nullable=False, index=True)
+    expertise_type_id = db.Column(db.Integer, db.ForeignKey('expertise_types.id'), nullable=False, index=True)
 
-    # Relationships
-    package = db.relationship('Package', back_populates='package_expertises')
-    expertise_type = db.relationship('ExpertiseType')
-    # expertise_reports = db.relationship('ExpertiseReport', back_populates='package_expertise')
+    package = db.relationship('Package', back_populates='package_expertises', lazy=True)
+    expertise_type = db.relationship('ExpertiseType', lazy=True)
 
     def __repr__(self):
         return f'<PackageExpertise {self.package.name} - {self.expertise_type.name}>'

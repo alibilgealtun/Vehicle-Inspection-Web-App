@@ -4,11 +4,18 @@ from wtforms.validators import DataRequired, Length, NumberRange, Optional
 
 
 class StaffForm(FlaskForm):
-    full_name = StringField(
-        'Full Name',
+    first_name = StringField(
+        'First Name',
         validators=[
             DataRequired(message="Bu alan gereklidir."),
-            Length(min=2, max=100, message="Adı ve soyadı 2 ile 100 karakter arasında olmalıdır.")
+            Length(min=2, max=50, message="Ad 2 ile 50 karakter arasında olmalıdır.")
+        ]
+    )
+    last_name = StringField(
+        'Last Name',
+        validators=[
+            DataRequired(message="Bu alan gereklidir."),
+            Length(min=2, max=50, message="Soyad 2 ile 50 karakter arasında olmalıdır.")
         ]
     )
     password = PasswordField(
@@ -22,7 +29,7 @@ class StaffForm(FlaskForm):
         'Phone Number',
         validators=[
             DataRequired(message="Bu alan gereklidir."),
-            Length(min=10, max=15, message="Telefon numarası 10 ile 15 karakter arasında olmalıdır.")
+            Length(min=2, max=15, message="Telefon numarası 10 ile 15 karakter arasında olmalıdır.")
         ]
     )
     department = StringField(
