@@ -81,7 +81,7 @@
                 {% for feature in expertise_report.features %}
                 {% if feature.name == 'ÖN SOL FREN' %}
                 <label for="on_sol_fren">ÖN SOL FREN</label>
-                <input type="number" id="on_sol_fren" name="on_sol_fren" value="{{ feature.status }}">
+                <input type="number" id="on_sol_fren" name="feature_{{ feature.id }}" value="{{ feature.status }}">
                 {% endif %}
                 {% endfor %}
             </div>
@@ -89,7 +89,7 @@
                 {% for feature in expertise_report.features %}
                 {% if feature.name == 'ÖN SAĞ FREN' %}
                 <label for="on_sag_fren">ÖN SAĞ FREN</label>
-                <input type="number" id="on_sag_fren" name="on_sag_fren" value="{{ feature.status }}">
+                <input type="number" id="on_sag_fren" name="feature_{{ feature.id }}" value="{{ feature.status }}">
                 {% endif %}
                 {% endfor %}
             </div>
@@ -106,7 +106,7 @@
                 {% for feature in expertise_report.features %}
                 {% if feature.name == 'ARKA SOL FREN' %}
                 <label for="arka_sol_fren">ARKA SOL FREN</label>
-                <input type="number" id="arka_sol_fren" name="arka_sol_fren" value="{{ feature.status }}">
+                <input type="number" id="arka_sol_fren" name="feature_{{ feature.id }}" value="{{ feature.status }}">
                 {% endif %}
                 {% endfor %}
             </div>
@@ -114,7 +114,7 @@
                 {% for feature in expertise_report.features %}
                 {% if feature.name == 'ARKA SAĞ FREN' %}
                 <label for="arka_sag_fren">ARKA SAĞ FREN</label>
-                <input type="number" id="arka_sag_fren" name="arka_sag_fren" value="{{ feature.status }}">
+                <input type="number" id="arka_sag_fren" name="feature_{{ feature.id }}" value="{{ feature.status }}">
                 {% endif %}
                 {% endfor %}
             </div>
@@ -129,7 +129,7 @@
                 {% for feature in expertise_report.features %}
                 {% if feature.name == 'EL FRENI SOL' %}
                 <label for="el_freni_sol">EL FRENİ SOL</label>
-                <input type="number" id="el_freni_sol" name="el_freni_sol" value="{{ feature.status }}">
+                <input type="number" id="el_freni_sol" name="feature_{{ feature.id }}" value="{{ feature.status }}">
                 {% endif %}
                 {% endfor %}
             </div>
@@ -137,7 +137,7 @@
                 {% for feature in expertise_report.features %}
                 {% if feature.name == 'EL FRENI SAĞ' %}
                 <label for="el_freni_sag">EL FRENİ SAĞ</label>
-                <input type="number" id="el_freni_sag" name="el_freni_sag" value="{{ feature.status }}">
+                <input type="number" id="el_freni_sag" name="feature_{{ feature.id }}" value="{{ feature.status }}">
                 {% endif %}
                 {% endfor %}
             </div>

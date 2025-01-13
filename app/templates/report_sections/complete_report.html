@@ -52,7 +52,10 @@
                 </li>
                 {% endfor %}
             </ul>
+            <!-- Example snippet in complete_report.html -->
+
         </div>
+
 
 
         <!-- Main Content Area -->
@@ -61,9 +64,23 @@
             <p>Bir ekspertiz tipi seçin...</p>
         </div>
     </div>
+<div class="container mx-auto text-right p-4 pb-16">
+    <button onclick="confirmRedirect('{{ report.id }}')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Rapor Oluştur
+    </button>
 </div>
 
+    
+</div>
+
+
 <script>
+    function confirmRedirect(reportId) {
+        if (confirm("Rapor üretmek istediğinize emin misiniz? Bu işlem rapor bitiminde gerçekleşmelidir.")) {
+            window.location.href = `/pdfs/generate/${reportId}`;
+        }
+    }
+
     $(document).ready(function() {
         $('a[data-expertise-type]').on('click', function(event) {
             event.preventDefault();
@@ -83,6 +100,6 @@
         });
     });
 </script>
-<
+
 </body>
 </html>

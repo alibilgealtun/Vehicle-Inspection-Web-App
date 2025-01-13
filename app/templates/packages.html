@@ -83,8 +83,8 @@
 
             <p>Uygulanan Ekspertizler:</p>
             <ul class="list-disc ml-5">
-                {% for expertise in get_expertises(package) %}
-                <li>{{ expertise.name }}</li>
+                {% for expertise_name in get_expertises(package) %}
+                <li>{{ expertise_name }}</li>
                 {% endfor %}
             </ul>
         </div>

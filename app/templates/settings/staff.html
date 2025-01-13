@@ -5,11 +5,11 @@
     <div class="grid grid-cols-1 gap-6 mt-4">
         <div>
             <label for="contact_name" class="block text-sm font-medium text-gray-700">Adı ve Soyadı</label>
-            <input type="text" name="contact_name" id="contact_name" value="{{ company.contact_name }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <input type="text" name="contact_name" id="contact_name" value="{{ form.contact_name.data }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
         </div>
         <div>
             <label for="contact_phone" class="block text-sm font-medium text-gray-700">Cep Telefonu</label>
-            <input type="text" name="contact_phone" id="contact_phone" value="{{ company.contact_phone }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <input type="text" name="contact_phone" id="contact_phone" value="{{ form.contact_phone.data }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
         </div>
     </div>
 

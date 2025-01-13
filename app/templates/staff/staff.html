@@ -29,17 +29,23 @@
             <tbody>
             {% for member in staff %}
             <tr class="border-b">
-                <td class="px-4 py-2">{{ member.full_name }}</td>
+                <td class="px-4 py-2">{{ member.first_name }} {{ member.last_name }}</td>
                 <td class="px-4 py-2">{{ member.phone_number }}</td>
                 <td class="px-4 py-2">{{ member.role }}</td>
                 <td class="px-4 py-2">
                     <span class="bg-teal-500 text-white px-2 py-1 rounded-full text-xs">Aktif</span>
                 </td>
                 <td class="px-4 py-2">
-                    <button class="bg-orange-500 text-white px-3 py-1 rounded editBtn" data-id="{{ member.id }}" data-full_name="{{ member.full_name }}" data-phone_number="{{ member.phone_number }}" data-role="{{ member.role }}">
+                    <button class="bg-orange-500 text-white px-3 py-1 rounded editBtn" 
+                            data-id="{{ member.id }}" 
+                            data-first_name="{{ member.first_name }}" 
+                            data-last_name="{{ member.last_name }}" 
+                            data-phone_number="{{ member.phone_number }}" 
+                            data-role="{{ member.role }}">
                         <i class="fas fa-edit"></i> Düzenle
                     </button>
                     <form action="{{ url_for('staff.delete_staff', id=member.id) }}" method="POST" style="display:inline;">
+                        {{ form.hidden_tag() }}
                         <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded ml-2" onclick="return confirm('Bu personeli silmek istediğinize emin misiniz?')">
                             <i class="fas fa-trash-alt"></i> Sil
                         </button>
@@ -72,12 +78,21 @@
             <form action="{{ url_for('staff.add_staff') }}" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="full_name">
-                        Personel Adı ve Soyadı
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="first_name">
+                        Adı
                     </label>
-                    <input type="text" id="full_name" name="full_name" placeholder="Örn: Ali Altun" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ form.full_name.data | skip_none }}">
-                    {% if form.full_name.errors %}
-                    <p class="text-red-500 text-xs italic">{{ form.full_name.errors[0] }}</p>
+                    <input type="text" id="first_name" name="first_name" placeholder="Örn: Ali" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ form.first_name.data | skip_none }}">
+                    {% if form.first_name.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.first_name.errors[0] }}</p>
+                    {% endif %}
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="last_name">
+                        Soyadı
+                    </label>
+                    <input type="text" id="last_name" name="last_name" placeholder="Örn: Altun" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ form.last_name.data | skip_none }}">
+                    {% if form.last_name.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.last_name.errors[0] }}</p>
                     {% endif %}
                 </div>
                 <div class="mb-4">
@@ -135,12 +150,21 @@
             <form id="editForm" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_full_name">
-                        Personel Adı ve Soyadı
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_first_name">
+                        Adı
                     </label>
-                    <input type="text" id="edit_full_name" name="full_name" placeholder="Örn: Ali Altun" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    {% if form.full_name.errors %}
-                    <p class="text-red-500 text-xs italic">{{ form.full_name.errors[0] }}</p>
+                    <input type="text" id="edit_first_name" name="first_name" placeholder="Örn: Ali" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    {% if form.first_name.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.first_name.errors[0] }}</p>
+                    {% endif %}
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit_last_name">
+                        Soyadı
+                    </label>
+                    <input type="text" id="edit_last_name" name="last_name" placeholder="Örn: Altun" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    {% if form.last_name.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.last_name.errors[0] }}</p>
                     {% endif %}
                 </div>
                 <div class="mb-4">
@@ -210,12 +234,14 @@
     document.querySelectorAll('.editBtn').forEach(button => {
         button.addEventListener('click', function() {
             const staffId = this.dataset.id;
-            const fullName = this.dataset.full_name;
+            const firstName = this.dataset.first_name;
+            const lastName = this.dataset.last_name;
             const phoneNumber = this.dataset.phone_number;
             const role = this.dataset.role;
 
             // Populate the form fields
-            document.getElementById('edit_full_name').value = fullName;
+            document.getElementById('edit_first_name').value = firstName;
+            document.getElementById('edit_last_name').value = lastName;
             document.getElementById('edit_phone_number').value = phoneNumber;
             document.getElementById('edit_role').value = role;
 

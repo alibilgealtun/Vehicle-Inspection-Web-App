@@ -44,22 +44,22 @@
     {% if feature.name == 'SOL ÖN' %}
     <div class="mb-4">
         <label for="sol_on" class="block text-gray-700 font-semibold mb-2">SOL ÖN</label>
-        <input type="number" id="sol_on" name="sol_on" value="{{ feature.status }}">
+        <input type="number" id="sol_on" name="feature_{{ feature.id }}" value="{{ feature.status }}">
     </div>
     {% elif feature.name == 'SAĞ ÖN' %}
     <div class="mb-4">
         <label for="sag_on" class="block text-gray-700 font-semibold mb-2">SAĞ ÖN</label>
-        <input type="number" id="sag_on" name="sag_on" value="{{ feature.status }}">
+        <input type="number" id="sag_on" name="feature_{{ feature.id }}" value="{{ feature.status }}">
     </div>
     {% elif feature.name == 'SOL ARKA' %}
     <div class="mb-4">
         <label for="sol_arka" class="block text-gray-700 font-semibold mb-2">SOL ARKA</label>
-        <input type="number" id="sol_arka" name="sol_arka" value="{{ feature.status }}">
+        <input type="number" id="sol_arka" name="feature_{{ feature.id }}" value="{{ feature.status }}">
     </div>
     {% elif feature.name == 'SAĞ ARKA' %}
     <div class="mb-4">
         <label for="sag_arka" class="block text-gray-700 font-semibold mb-2">SAĞ ARKA</label>
-        <input type="number" id="sag_arka" name="sag_arka" value="{{ feature.status }}">
+        <input type="number" id="sag_arka" name="feature_{{ feature.id }}" value="{{ feature.status }}">
     </div>
     {% endif %}
     {% endfor %}
