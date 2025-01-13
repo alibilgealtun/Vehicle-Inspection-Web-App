@@ -22,19 +22,28 @@ def add_appointment():
     form = AppointmentForm()
     if form.validate_on_submit():
         customer_name = form.customer_name.data
+        name_parts = customer_name.split(' ', 1)
+        
+        # Ensure that we have at least a first name
+        first_name = name_parts[0]
+        last_name = name_parts[1] if len(name_parts) > 1 else ''  # Default to empty string if no last name
+
         phone_number = form.phone_number.data
         date_obj = form.date.data
         time_obj = form.time.data
         brand = form.brand.data
         model = form.model.data
 
-        customer = Customer.query.filter_by(full_name=customer_name, phone_number=phone_number).first()
-        # finds customer with customer name & phone num, if not found creates new customer
+        # Find customer by first name, last name, and phone number
+        customer = Customer.query.filter_by(first_name=first_name, last_name=last_name, phone_number=phone_number).first()
+        
+        # If customer not found, create a new customer
         if not customer:
-            customer = Customer(full_name=customer_name, phone_number=phone_number)
+            customer = Customer(first_name=first_name, last_name=last_name, phone_number=phone_number)
             db.session.add(customer)
             db.session.commit()
 
+        # Create a new appointment
         new_appointment = Appointment(
             customer_id=customer.id,
             date=date_obj,
@@ -60,7 +69,15 @@ def update_appointment(appointment_id):
     form = AppointmentForm(obj=appointment)  # Populate the form with existing data
 
     if form.validate_on_submit():  # This checks if the form is submitted and passes validation
-        appointment.customer.full_name = form.customer_name.data
+        # Split the customer name into first and last names
+        customer_name = form.customer_name.data
+        name_parts = customer_name.split(' ', 1)
+        first_name = name_parts[0]
+        last_name = name_parts[1] if len(name_parts) > 1 else ''  # Default to empty string if no last name
+
+        # Update the customer details
+        appointment.customer.first_name = first_name
+        appointment.customer.last_name = last_name
         appointment.customer.phone_number = form.phone_number.data
         appointment.date = form.date.data
         appointment.time = form.time.data

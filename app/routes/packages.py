@@ -27,7 +27,6 @@ def add_pckg():
         new_package = Package(
             name=form.name.data,
             price=form.price.data,
-            contents=', '.join(form.contents.data),  # Join selected contents into a single string
             active=form.active.data == 'active'  # Convert to Boolean
         )
 
@@ -47,11 +46,11 @@ def add_pckg():
         # Commit all changes to the database
         db.session.commit()
 
-        flash('Paket başarıyla oluşturuldu!', 'success')
+        #flash('Paket başarıyla oluşturuldu!', 'success')
         return redirect(url_for('packages.packages_list'))
     else:
         print(form.errors)
-        flash('Formu doğru doldurduğunuza emin olun!', 'error')
+        #flash('Formu doğru doldurduğunuza emin olun!', 'error')
         return redirect(url_for('packages.packages_list'))
 
 
@@ -82,7 +81,7 @@ def update_package(package_id):
             db.session.add(package_expertise)
 
         db.session.commit()
-        flash('Paket başarıyla güncellendi!', 'success')
+        #flash('Paket başarıyla güncellendi!', 'success')
         return redirect(url_for('packages.packages_list'))
 
     # Check for an AJAX request
@@ -111,11 +110,11 @@ def delete_package(package_id):
     associated_reports = Report.query.filter_by(package_id=package_id).all()
 
     if associated_reports:
-        flash('Bu paket birden fazla raporda kullanıldığı için silinemez!', 'danger')
+        #flash('Bu paket birden fazla raporda kullanıldığı için silinemez!', 'danger')
         return redirect(url_for('packages.packages_list'))
 
     db.session.delete(package)
     db.session.commit()
-    flash('Paket başarıyla silindi!', 'success')
+    #flash('Paket başarıyla silindi!', 'success')
 
     return redirect(url_for('packages.packages_list'))

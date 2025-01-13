@@ -8,10 +8,7 @@ from ..services.report_service import (get_or_create_customer, create_report, ge
                                        get_or_create_agent, get_or_create_vehicle, get_or_create_staff_by_name)
 from sqlalchemy.exc import IntegrityError
 from ..forms.report_form import ReportForm
-import logging
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 
 reports = Blueprint('reports', __name__)
 
@@ -28,6 +25,7 @@ def report_list():
 @reports.route('/report/add', methods=['GET', 'POST'])
 def add_report():
     form = ReportForm()
+    print("Initialized ReportForm", flush=True)
 
     # Define choices for the form fields
     fuel_types = [(fuel.name, fuel.value) for fuel in FuelType]
@@ -51,6 +49,8 @@ def add_report():
     vehicle_info = None  # Initialize vehicle_info
 
     if form.validate_on_submit():
+        print(f"Form data: {form.data}", flush=True)
+
         try:
             # Create the Vehicle
             vehicle = get_or_create_vehicle({
@@ -65,6 +65,7 @@ def add_report():
                 'fuel_type': form.fuel_type.data,
                 'vehicle_km': form.vehicle_km.data,
             })
+            print(f"Created vehicle: {vehicle}", flush=True)
 
             # Update vehicle_info for use in rendering the form
             vehicle_info = {
@@ -78,6 +79,8 @@ def add_report():
                 'fuel_type': vehicle.fuel_type.value,
                 'mileage': vehicle.mileage
             }
+            print(f"Vehicle info updated: {vehicle_info}", flush=True)
+
             # Create or get the Customer with all provided data
             customer_data = {
                 'customer_name': form.customer_name.data,
@@ -87,6 +90,7 @@ def add_report():
                 'customer_address': form.customer_address.data
             }
             customer = get_or_create_customer(customer_data)
+            print(f"Created or retrieved customer: {customer}", flush=True)
 
             # Optionally create or get the VehicleOwner if the data is provided
             vehicle_owner = None
@@ -98,14 +102,17 @@ def add_report():
                     'owner_address': form.owner_address.data
                 }
                 vehicle_owner = get_or_create_vehicle_owner(vehicle_owner_data)
+                print(f"Created or retrieved vehicle owner: {vehicle_owner}", flush=True)
 
             # Optionally create or get the Agent if the name is provided
             agent = None
             if form.agent_name.data:
                 agent = get_or_create_agent(form.agent_name.data)
+                print(f"Created or retrieved agent: {agent}", flush=True)
 
             # Get or create the staff with name
             staff = Staff.query.get(form.created_by.data)
+            print(f"Retrieved staff: {staff}", flush=True)
 
             # Create a new Report with the generated vehicle details
             new_report = create_report(
@@ -117,18 +124,23 @@ def add_report():
                 created_by=staff.id,
                 registration_document_seen=form.registration_document_seen.data
             )
+            print(f"Created new report: {new_report}", flush=True)
+
             # Optionally link VehicleOwner to the report if it was created
             if vehicle_owner:
                 vehicle_owner.report_id = new_report.id
                 db.session.add(vehicle_owner)
+                print(f"Linked vehicle owner to report: {vehicle_owner}", flush=True)
 
             # Optionally link Agent to the report if it was created
             if agent:
                 agent.report_id = new_report.id
                 db.session.add(agent)
+                print(f"Linked agent to report: {agent}", flush=True)
 
             # Commit all changes
             db.session.commit()
+            print("Database changes committed successfully", flush=True)
 
             flash('Rapor başarıyla oluşturuldu!', 'success')
             return redirect(url_for('reports.report_list'))
@@ -136,16 +148,16 @@ def add_report():
         except IntegrityError as e:
             db.session.rollback()
             flash('Tüm değerleri doğru girdiğinize emin olun!', 'error')
-            print(f"IntegrityError: {e}")
+            print(f"IntegrityError: {e}", flush=True)
 
         except Exception as e:
             db.session.rollback()
             flash('Beklenmedik bir hata oluştu!', 'error')
-            print(f"Unexpected Error: {e}")
+            print(f"Unexpected Error: {e}", flush=True)
 
     else:
-        print("Form validation failed")
-        print(form.errors)
+        print("Form validation failed", flush=True)
+        print(f"Form errors: {form.errors}", flush=True)
 
     # Render the form with errors and vehicle info if available
     return render_template(
@@ -162,7 +174,6 @@ def add_report():
 
 @reports.route('/report/update/<int:report_id>', methods=['GET', 'POST'])
 def update_report(report_id):
-    print("update çalıştı")
     report = Report.query.get_or_404(report_id)
     form = ReportForm(obj=report)
     if form.validate_on_submit():
@@ -222,7 +233,15 @@ def show_complete_report(report_id):
     report = Report.query.get_or_404(report_id)
     package_expertises = PackageExpertise.query.filter_by(package_id=report.package_id).all()
 
-    return render_template('report_sections/complete_report.html', report=report,  package_expertises=package_expertises)
+    # Fetch expertise reports through the package expertises
+    expertise_reports = ExpertiseReport.query.filter(
+        ExpertiseReport.expertise_type_id.in_([pe.expertise_type_id for pe in package_expertises])
+    ).all()
+
+    # Add this line to include the package's expertises
+    package_expertise_types = [pe.expertise_type for pe in package_expertises]
+
+    return render_template('report_sections/complete_report.html', report=report, package_expertises=package_expertises, expertise_reports=expertise_reports, package_expertise_types=package_expertise_types)
 
 
 @reports.route('/report/expertise_detail_ajax', methods=['GET'])
@@ -299,20 +318,16 @@ def expertise_detail_ajax():
 
 @reports.route('/report/expertise/<int:expertise_report_id>', methods=['GET', 'POST'])
 def expertise_detail(expertise_report_id):
-    logger.debug(f"Accessing expertise_detail with report_id: {expertise_report_id}")
 
     expertise_report = ExpertiseReport.query.get_or_404(expertise_report_id)
-    logger.debug(f"Retrieved expertise_report: {expertise_report}")
 
     expertise_report2_id = request.form.get('expertise_report2_id')
-    logger.debug(f"Received expertise_report2_id: {expertise_report2_id}")
 
     expertise_report2 = None
     if expertise_report2_id:
         expertise_report2 = ExpertiseReport.query.get(expertise_report2_id)
 
     if request.method == 'POST':
-        logger.debug("Processing POST request")
         try:
             reports_to_update = [expertise_report]
             if expertise_report2:
@@ -329,38 +344,32 @@ def expertise_detail(expertise_report_id):
             }
 
             for report in reports_to_update:
-                logger.debug(f"Updating report: {report}")
                 for feature in report.features:
                     new_status = request.form.get(f'feature_{feature.id}')
+                    print(f'Feature {feature.id}: Current Status = {feature.status}, New Status = {new_status}',
+                          flush=True)
 
-                    if new_status in status_directory_map.keys():
+                    if new_status and new_status != feature.status:
                         feature.status = new_status
-                        #feature_name_encoded = feature.name.replace(' ', '%20')
-                        feature.image_path = f'assets/car_parts/{status_directory_map[new_status]}/{feature.name}.png'
+                        feature.image_path = f'assets/car_parts/{status_directory_map.get(new_status, "default")}/{feature.name}.png'
+                        db.session.add(feature)
+                        print(f'Feature {feature.id} updated to {new_status}', flush=True)
 
-                    elif new_status is None:
-                        if feature.name in ['SOL ÖN', 'SAĞ ÖN', 'SOL ARKA', 'SAĞ ARKA', 'ÖN SOL FREN', 'ÖN SAĞ FREN',
-                                            'ARKA SOL FREN', 'ARKA SAĞ FREN', 'EL FRENI SOL', 'EL FRENI SAĞ']:
-                            value = request.form.get(feature.name.lower().replace(' ', '_'))
-                            if value is not None:
-                                feature.status = value
-                                logger.debug(f"Updated {feature.name} status to: {value}")
-
+                # Update comments if present
                 new_comment = request.form.get('technician_comment')
-                if new_comment is not None:
+                if new_comment is not None and new_comment != report.comment:
                     report.comment = new_comment
-                    logger.debug(f"Updated technician comment for report ID: {report.id}")
+                    print(f'Comment updated for report {report.id}', flush=True)
+
 
             db.session.commit()
-            logger.debug("Database changes committed successfully")
-
+            print('Changes committed successfully', flush=True)
             return jsonify({"success": True}), 200
         except Exception as e:
             db.session.rollback()
-            logger.error(f"Error occurred: {str(e)}")
+            print(f'Error: {str(e)}', flush=True)
             return jsonify({"success": False, "error": str(e)}), 500
 
-    logger.debug("Rendering complete_report.html")
     return render_template('report_sections/complete_report.html', expertise_report=expertise_report,
                            expertise_report2=expertise_report2)
 

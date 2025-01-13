@@ -21,7 +21,8 @@ def add_staff():
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=16)
         new_staff = Staff(
-            full_name=form.full_name.data,
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
             password=hashed_password,  # Store the hashed password
             phone_number=form.phone_number.data,
             department="Default",
@@ -49,7 +50,9 @@ def edit_staff(id):
     form = StaffForm(obj=staff_member)
 
     if form.validate_on_submit():
-        staff_member.full_name = form.full_name.data
+        print("Form data:", form.first_name.data, form.last_name.data, form.phone_number.data, form.role.data)  # Debugging line
+        staff_member.first_name = form.first_name.data
+        staff_member.last_name = form.last_name.data
         staff_member.phone_number = form.phone_number.data
         staff_member.role = form.role.data
 
@@ -65,8 +68,10 @@ def edit_staff(id):
             db.session.rollback()
             flash('Güncelleme sırasında bir hata oluştu. Tüm değerleri doğru girdiğinize emin olun!', 'error')
             print(f"IntegrityError: {e}")
+    else:
+        print(form.errors)  # Debugging line
 
-    return render_template('staff/edit_staff.html', form=form)
+    return render_template('staff/staff.html', staff=Staff.query.all(), form=form)
 
 
 
