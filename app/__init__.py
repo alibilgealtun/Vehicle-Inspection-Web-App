@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from flask import Flask
 from .database import db, migrate
 from .models import (
-    Agent, Appointment, Branch, Company,
+    Address,    Agent, Appointment, Branch, Company,
     Customer, Package, Report, Staff, Vehicle, VehicleOwner,
     ExpertiseType, ExpertiseFeature, ExpertiseReport, PackageExpertise)
 import logging
@@ -14,6 +14,7 @@ from .services.commands import register_commands
 from .services.expertise_initializer import ExpertiseInitializer
 from .tests.test_config import TestConfig
 from .services.company_service import create_default_company
+from .services.package_service import create_default_package
 
 # Import blueprints
 from .routes.appointments import appointments as appointments_bp
@@ -53,7 +54,7 @@ def create_app(config_object=None):
 
 
     logging.getLogger('fontTools.subset').setLevel(logging.WARNING)
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI', 'sqlite:///app.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI', 'mysql+pymysql://dbms:dbms123@localhost/flask_app')
     db.init_app(app)
 
     migrate.init_app(app, db)
@@ -62,7 +63,8 @@ def create_app(config_object=None):
         db.create_all()
         db.session.commit()
         ExpertiseInitializer.initialize_expertise_reports()  # Initialize expertise reports
-        create_default_company()
+        create_default_company() 
+        create_default_package()
 
     register_commands(app)
 
